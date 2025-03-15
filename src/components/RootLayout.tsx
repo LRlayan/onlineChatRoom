@@ -14,6 +14,8 @@ const chatDetails = [
     {name:"Gotabaya", date: "2025-03-16", lastSeen: "7.53 am", msgStatus: "delivered", messages: "ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi.", category: ""},
     {name:"Anura Sahodaraya", date: "2025-03-16", lastSeen: "7.53 am", msgStatus: "sent", messages: "ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi.", category: ""},
     {name:"Samare", date: "2025-03-16", lastSeen: "7.53 am", msgStatus: "seen", messages: "ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi.", category: "Groups"},
+    {name:"Samare", date: "2025-03-16", lastSeen: "7.53 am", msgStatus: "seen", messages: "ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi.", category: "Groups"},
+    {name:"Samare", date: "2025-03-16", lastSeen: "7.53 am", msgStatus: "seen", messages: "ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi.", category: "Groups"},
 ];
 
 
@@ -25,7 +27,11 @@ const RootLayout: React.FC = () => {
 
     return (
         <Layout>
-            <Sider trigger={null} collapsible collapsed={collapsed} width={388} collapsedWidth={120} style={{ background: "#1f252e" }}>
+            <Sider trigger={null} collapsible collapsed={collapsed} width={388} collapsedWidth={120}
+                   style={{
+                       background: "#1f252e",
+                   }}
+            >
                 <div className="demo-logo-vertical" />
                 <Button
                     type="text"
@@ -37,14 +43,17 @@ const RootLayout: React.FC = () => {
                         color: "white",
                     }}
                 />
-                <Flex direction="column" className="gap-4 pb-2 justify-center">
+                <Flex direction="column" className="gap-4 justify-center">
                     <Tabs.Root defaultValue="allChats">
                         <Tabs.List className="text-white border-b border-gray-700">
                             <Tabs.Trigger value="allChats" className="px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500">All Chats</Tabs.Trigger>
                             <Tabs.Trigger value="Groups" className="px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500">Groups</Tabs.Trigger>
                         </Tabs.List>
 
-                        <Box pt="3">
+                        <Box pt="3" style={{
+                            height: "82.6vh",
+                            overflowY: "auto"
+                        }}>
                             {["allChats", "Groups"].map((category) => (
                                 <Tabs.Content key={category} value={category}>
                                     {chatDetails.filter((data) => category === "allChats" || data.category === category)
