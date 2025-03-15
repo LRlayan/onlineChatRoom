@@ -46,14 +46,14 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
     };
 
     return (
-        <Box width="395px" p="3">
-            <Card size="3" style={{ padding: "16px" }}>
-                <Flex gap="4" align="center">
+        <Box width="370px" p="3">
+            <Card size="3" style={{ padding: "16px 0 16px 16px" }}>
+                <Flex align="center" style={{ padding: "0", margin:"0" }}>
                     { collapse ?
-                        <Avatar size="6" fallback="T" color="cyan" className="mr-5 ml-0.5 text-3xl" style={{ borderRadius: "50%" }}/>
+                        <Avatar size="6" fallback="T" color="cyan" className="mr-2 ml-0.5 text-3xl" style={{ borderRadius: "50%" }}/>
                         :
                         <>
-                            <Avatar size="6" fallback="T" color="sky" className="mr-5 text-3xl" style={{ borderRadius: "50%" }}/>
+                            <Avatar size="6" fallback="T" color="sky" className="mr-2 text-3xl" style={{ borderRadius: "50%" }}/>
                             <Box>
                                 <Flex align="center" justify="between">
                                     <Text as="div" weight="bold" className="text-amber-50 max-w-96" style={{ fontSize: "16px" }}>
