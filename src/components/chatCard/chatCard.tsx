@@ -46,7 +46,7 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
     };
 
     return (
-        <Box width="370px" p="3">
+        <Box width="378px" p="3">
             <Card size="3" style={{ padding: "16px 0 16px 16px" }}>
                 <Flex align="center" style={{ padding: "0", margin:"0" }}>
                     { collapse ?
