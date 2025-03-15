@@ -52,7 +52,10 @@ const RootLayout: React.FC = () => {
 
                         <Box pt="3" style={{
                             height: "82.6vh",
-                            overflowY: "auto"
+                            overflowY: "auto",
+                            scrollBehavior: "smooth",
+                            scrollbarWidth: "thin",
+                            scrollbarColor: "#888 #333",
                         }}>
                             {["allChats", "Groups"].map((category) => (
                                 <Tabs.Content key={category} value={category}>
