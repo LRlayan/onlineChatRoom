@@ -1,7 +1,7 @@
 import * as React from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined, } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, } from '@ant-design/icons';
 import { FiMenu } from "react-icons/fi";
-import { Button, Layout, Menu, theme } from 'antd';
+import { Button, Layout, theme } from 'antd';
 import {useState} from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import {Box, Flex} from "@radix-ui/themes";
@@ -10,7 +10,10 @@ import ChatCard from "./chatCard/chatCard.tsx";
 const { Header, Sider, Content } = Layout;
 
 const chatDetails = [
-    {}
+    {name:"Ramesh Layan", date: "2025-03-16", lastSeen: "7.53 am", msgStatus: "seen", messages: "ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi. ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi. ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi.", category: "Groups"},
+    {name:"Gotabaya", date: "2025-03-16", lastSeen: "7.53 am", msgStatus: "delivered", messages: "ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi.", category: ""},
+    {name:"Anura Sahodaraya", date: "2025-03-16", lastSeen: "7.53 am", msgStatus: "sent", messages: "ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi.", category: ""},
+    {name:"Samare", date: "2025-03-16", lastSeen: "7.53 am", msgStatus: "seen", messages: "ado mokada karanne ada ban set wemuda rata. 1500k dammanam athi.", category: "Groups"},
 ];
 
 
@@ -44,36 +47,15 @@ const RootLayout: React.FC = () => {
                         <Box pt="3">
                             {["allChats", "Groups"].map((category) => (
                                 <Tabs.Content key={category} value={category}>
-                                    {collapsed ? <ChatCard collapse={collapsed}/> : <ChatCard collapse={collapsed}/>
-                                    }
+                                    {chatDetails.filter((data) => category === "allChats" || data.category === category)
+                                        .map((card) => (
+                                            <ChatCard collapse={collapsed} name={card.name} date={card.date} lastSeen={card.lastSeen} msgStatus={card.msgStatus} message={card.messages}/>
+                                        ))}
                                 </Tabs.Content>
                             ))}
                         </Box>
                     </Tabs.Root>
                 </Flex>
-                <Menu
-                    theme="dark"
-                    mode="vertical"
-                    defaultSelectedKeys={['1']}
-                    style={{ background: "#1f252e" }}
-                    items={[
-                        {
-                            key: '1',
-                            icon: <UserOutlined />,
-                            label: 'nav 1',
-                        },
-                        {
-                            key: '2',
-                            icon: <VideoCameraOutlined />,
-                            label: 'nav 2',
-                        },
-                        {
-                            key: '3',
-                            icon: <UploadOutlined />,
-                            label: 'nav 3',
-                        },
-                    ]}
-                />
             </Sider>
             <Layout style={{ background: "black" }}>
                 <Header style={{ padding: 0, background: "#313a47", }}>
