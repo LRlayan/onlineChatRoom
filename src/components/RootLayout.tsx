@@ -9,6 +9,7 @@ import { MessageOutlined, TeamOutlined } from "@ant-design/icons";
 import {ChatArea} from "../pages/chatArea.tsx";
 import "@radix-ui/themes/styles.css";
 import DropdownMenuSet from "./dropdownMenu/dropdownMenu.tsx";
+import ProfileView from "./profileView/profileView.tsx";
 
 const { Header, Sider, Content } = Layout;
 
@@ -28,6 +29,7 @@ const RootLayout: React.FC = () => {
         token: {},
     } = theme.useToken();
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
+    const [showProfile, setShowProfile] = useState(false);
 
     const handleCardClick = (key: number) => {
         setSelectedCard(prev => prev === key ? null : key);
@@ -40,50 +42,56 @@ const RootLayout: React.FC = () => {
                            background: "#1f252e",
                        }}
                 >
-                    <div className="demo-logo-vertical" />
-                    <DropdownMenuSet/>
-                    <Flex direction="column" className="gap-4 justify-center">
-                        <Tabs.Root defaultValue="allChats">
-                            <Tabs.List className="text-white border-b border-gray-700 flex items-center overflow-x-hidden">
-                                <Tabs.Trigger value="allChats" className={`px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500 flex items-center ${collapsed ? "justify-center" : ""}`}>
-                                    <MessageOutlined style={{ fontSize: "20px", color: "gray" }} />
-                                    {!collapsed && <span className="ml-2">All Chats</span>}
-                                </Tabs.Trigger>
+                    {!showProfile ? (
+                    <>
+                        <div className="demo-logo-vertical" />
+                        <DropdownMenuSet setShowProfile={setShowProfile} />
+                        <Flex direction="column" className="gap-4 justify-center">
+                            <Tabs.Root defaultValue="allChats">
+                                <Tabs.List className="text-white border-b border-gray-700 flex items-center overflow-x-hidden">
+                                    <Tabs.Trigger value="allChats" className={`px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500 flex items-center ${collapsed ? "justify-center" : ""}`}>
+                                        <MessageOutlined style={{ fontSize: "20px", color: "gray" }} />
+                                        {!collapsed && <span className="ml-2">All Chats</span>}
+                                    </Tabs.Trigger>
 
-                                <Tabs.Trigger value="Groups" className={`px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500 flex items-center ${collapsed ? "justify-center" : ""}`}>
-                                    <TeamOutlined style={{ fontSize: "20px", color: "gray" }} />
-                                    {!collapsed && <span className="ml-2">Groups</span>}
-                                </Tabs.Trigger>
-                            </Tabs.List>
+                                    <Tabs.Trigger value="Groups" className={`px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500 flex items-center ${collapsed ? "justify-center" : ""}`}>
+                                        <TeamOutlined style={{ fontSize: "20px", color: "gray" }} />
+                                        {!collapsed && <span className="ml-2">Groups</span>}
+                                    </Tabs.Trigger>
+                                </Tabs.List>
 
-                            <Box pt="3" style={{
-                                height: "82.6vh",
-                                overflowY: "auto",
-                                overflowX: "hidden",
-                                scrollBehavior: "smooth",
-                                scrollbarWidth: "thin",
-                                scrollbarColor: "#888 #333",
-                            }}>
-                                {["allChats", "Groups"].map((category) => (
-                                    <Tabs.Content key={category} value={category}>
-                                        {chatDetails.filter((data) => category === "allChats" || data.category === category)
-                                            .map((card, index) => (
-                                                <ChatCard
-                                                    collapse={collapsed}
-                                                    key={index} name={card.name}
-                                                    date={card.date}
-                                                    lastSeen={card.lastSeen}
-                                                    msgStatus={card.msgStatus}
-                                                    message={card.messages}
-                                                    isSelected={selectedCard === index}
-                                                    onClick={() => handleCardClick(index)}
-                                                />
-                                            ))}
-                                    </Tabs.Content>
-                                ))}
-                            </Box>
-                        </Tabs.Root>
-                    </Flex>
+                                <Box pt="3" style={{
+                                    height: "82.6vh",
+                                    overflowY: "auto",
+                                    overflowX: "hidden",
+                                    scrollBehavior: "smooth",
+                                    scrollbarWidth: "thin",
+                                    scrollbarColor: "#888 #333",
+                                }}>
+                                    {["allChats", "Groups"].map((category) => (
+                                        <Tabs.Content key={category} value={category}>
+                                            {chatDetails.filter((data) => category === "allChats" || data.category === category)
+                                                .map((card, index) => (
+                                                    <ChatCard
+                                                        collapse={collapsed}
+                                                        key={index} name={card.name}
+                                                        date={card.date}
+                                                        lastSeen={card.lastSeen}
+                                                        msgStatus={card.msgStatus}
+                                                        message={card.messages}
+                                                        isSelected={selectedCard === index}
+                                                        onClick={() => handleCardClick(index)}
+                                                    />
+                                                ))}
+                                        </Tabs.Content>
+                                    ))}
+                                </Box>
+                            </Tabs.Root>
+                        </Flex>
+                    </>
+                        ) : (
+                        <ProfileView setShowProfile={setShowProfile} />
+                    )}
                 </Sider>
                 <Layout style={{ background: "black" }}>
                     <Header style={{ padding: 0, background: "#313a47", }}>
