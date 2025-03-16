@@ -7,9 +7,14 @@ import ImgCrop from 'antd-img-crop';
 import { UserOutlined, IdcardOutlined, MailOutlined } from '@ant-design/icons';
 import { DropdownMenu} from "@radix-ui/themes";
 
+interface ProfileViewProps {
+    setShowProfile: React.Dispatch<React.SetStateAction<boolean>>;
+    collapse: boolean;
+}
+
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-const ProfileView: React.FC<{ setShowProfile: (value: boolean) => void }> = ({ setShowProfile }) => {
+const ProfileView: React.FC<ProfileViewProps> = ({ setShowProfile, collapse }) => {
 
     const [fileList, setFileList] = useState<UploadFile[]>([
         {
@@ -44,15 +49,19 @@ const ProfileView: React.FC<{ setShowProfile: (value: boolean) => void }> = ({ s
         return true;
     };
 
+    const handleArrowBtn = () => {
+        setShowProfile(false);
+    }
+
     const handleEditProfile = () => {}
 
     return (
         <div className="p-4 text-white">
             <Flex className="flex" style={{ justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                <Button type="text" icon={<ArrowLeft />} onClick={() => setShowProfile(false)}
+                <Button type="text" icon={<ArrowLeft />} onClick={handleArrowBtn}
                         style={{ fontSize: '20px', color: "white", alignSelf: "start" }}
                 />
-                <Text style={{ fontSize: "24px", font: "icon" }}>Profile</Text>
+                <Text style={{ fontSize: "24px", font: "icon", display: collapse ? 'none' : '' }}>Profile</Text>
                 <Button type="text" icon={<Pencil color="white"/>} onClick={handleEditProfile}/>
             </Flex>
 
@@ -77,7 +86,7 @@ const ProfileView: React.FC<{ setShowProfile: (value: boolean) => void }> = ({ s
             <Flex gapY={"1"} className="flex flex-col ml-0 bg-gray-500 bg-opacity-25 rounded-lg pr-5 pl-5 pt-3 pb-3">
                 <Flex align="center" className="items-center hover:bg-blue-400 hover:bg-opacity-25 p-3 rounded-lg">
                     <UserOutlined className="text-gray-400" style={{ fontSize: "25px", marginRight: "12px" }} />
-                    <Flex className="flex flex-col ml-6">
+                    <Flex className="flex flex-col ml-6" style={{ display: collapse ? 'none' : '' }}>
                         <Text style={{ fontSize: "18px", font: "icon" }}>rameshlayan</Text>
                         <Text className="mb-0 text-gray-400" style={{ fontSize: "12px", font: "revert" }}>Username</Text>
                     </Flex>
@@ -85,7 +94,7 @@ const ProfileView: React.FC<{ setShowProfile: (value: boolean) => void }> = ({ s
                 <DropdownMenu.Separator/>
                 <Flex align="center" className="items-center hover:bg-blue-400 hover:bg-opacity-25 p-3 rounded-lg">
                     <IdcardOutlined className="text-gray-400"  style={{ fontSize: "25px", marginRight: "12px" }} />
-                    <Flex className="flex flex-col ml-6">
+                    <Flex className="flex flex-col ml-6" style={{ display: collapse ? 'none' : '' }}>
                         <Text style={{ fontSize: "18px", font: "icon" }}>Ramesh Layan</Text>
                         <Text className="mb-0 text-gray-400" style={{ fontSize: "12px", font: "revert" }}>Name</Text>
                     </Flex>
@@ -93,7 +102,7 @@ const ProfileView: React.FC<{ setShowProfile: (value: boolean) => void }> = ({ s
                 <DropdownMenu.Separator/>
                 <Flex align="center" className="items-center hover:bg-blue-400 hover:bg-opacity-25 p-3 rounded-lg">
                     <MailOutlined className="text-gray-400"  style={{ fontSize: "25px", marginRight: "12px" }} />
-                    <Flex className="flex flex-col ml-6">
+                    <Flex className="flex flex-col ml-6" style={{ display: collapse ? 'none' : '' }}>
                         <Text style={{ fontSize: "18px", font: "icon" }}>rameshlayan4@gmail.com</Text>
                         <Text className="text-gray-400" style={{ fontSize: "12px", font: "revert" }}>Email</Text>
                     </Flex>
