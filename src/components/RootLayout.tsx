@@ -1,15 +1,14 @@
 import * as React from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined, } from '@ant-design/icons';
-import { FiMenu } from "react-icons/fi";
 import { Button, Layout, theme } from 'antd';
 import {useState} from "react";
 import * as Tabs from "@radix-ui/react-tabs";
-import {Box, Flex, DropdownMenu} from "@radix-ui/themes";
+import {Box, Flex, } from "@radix-ui/themes";
 import ChatCard from "./chatCard/chatCard.tsx";
 import { MessageOutlined, TeamOutlined } from "@ant-design/icons";
 import {ChatArea} from "../pages/chatArea.tsx";
 import "@radix-ui/themes/styles.css";
-import { User, Bookmark, Archive, Star, Settings, } from "lucide-react";
+import DropdownMenuSet from "./dropdownMenu/dropdownMenu.tsx";
 
 const { Header, Sider, Content } = Layout;
 
@@ -42,59 +41,7 @@ const RootLayout: React.FC = () => {
                        }}
                 >
                     <div className="demo-logo-vertical" />
-
-                    <DropdownMenu.Root>
-                        <DropdownMenu.Trigger>
-                            <Button
-                                type="text"
-                                icon={<FiMenu size={27}/>}
-                                style={{
-                                    fontSize: '16px',
-                                    width: 64,
-                                    height: 64,
-                                    color: "white",
-                                }}
-                            />
-                        </DropdownMenu.Trigger>
-                        <DropdownMenu.Content>
-                            <DropdownMenu.Item>
-                                <User className="w-4 h-4 mr-2" /> Profile
-                            </DropdownMenu.Item>
-                            <DropdownMenu.Item>
-                                <Bookmark className="w-4 h-4 mr-2" /> Saved Message
-                            </DropdownMenu.Item>
-                            <DropdownMenu.Separator />
-                            <DropdownMenu.Item>
-                                <Archive className="w-4 h-4 mr-2" /> Archive Chats
-                            </DropdownMenu.Item>
-                            <DropdownMenu.Item>
-                                <Star className="w-4 h-4 mr-2" /> Add to favorites
-                            </DropdownMenu.Item>
-                            <DropdownMenu.Separator />
-                            <DropdownMenu.Sub>
-                                <DropdownMenu.Item>
-                                    <Settings className="w-4 h-4 mr-2" /> Setting
-                                </DropdownMenu.Item>
-                                <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
-                                <DropdownMenu.SubContent>
-                                    <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
-                                    <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
-
-                                    <DropdownMenu.Separator />
-                                    <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
-                                </DropdownMenu.SubContent>
-                            </DropdownMenu.Sub>
-
-                            {/*<DropdownMenu.Separator />*/}
-                            {/*<DropdownMenu.Item>Share</DropdownMenu.Item>*/}
-
-                            {/*<DropdownMenu.Separator />*/}
-                            {/*<DropdownMenu.Item shortcut="⌘ ⌫" color="red">*/}
-                            {/*    Delete*/}
-                            {/*</DropdownMenu.Item>*/}
-                        </DropdownMenu.Content>
-                    </DropdownMenu.Root>
-
+                    <DropdownMenuSet/>
                     <Flex direction="column" className="gap-4 justify-center">
                         <Tabs.Root defaultValue="allChats">
                             <Tabs.List className="text-white border-b border-gray-700 flex items-center overflow-x-hidden">
