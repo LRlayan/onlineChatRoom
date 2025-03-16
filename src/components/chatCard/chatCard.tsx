@@ -32,7 +32,7 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
                     <>
                         <Box className="flex ml-3">
                             <Flex gap="1" align="center">  {/* Reduced gap here */}
-                                <CheckOutlined style={{ fontSize: "13px", marginRight: "-8px", color: "gray" }} />
+                                <CheckOutlined style={{ fontSize: "13px", marginRight: "-11px", color: "gray" }} />
                                 <CheckOutlined style={{ fontSize: "13px", color: "gray" }} />
                             </Flex>
                         </Box>
@@ -43,7 +43,7 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
                     <>
                         <Box className="flex ml-3">
                             <Flex gap="1" align="center">  {/* Reduced gap here */}
-                                <CheckOutlined className="text-blue-500" style={{ fontSize: "13px", marginRight: "-8px" }} />
+                                <CheckOutlined className="text-blue-500" style={{ fontSize: "13px", marginRight: "-11px" }} />
                                 <CheckOutlined className="text-blue-500" style={{ fontSize: "13px", }} />
                             </Flex>
                         </Box>
@@ -55,15 +55,15 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
     };
 
     return (
-        <Box width="378px" p="3">
+        <Box width="378px" pb="2">
             <Card size="3"
-                  className={`cursor-pointer ${isSelected ? "bg-gray-700" : "hover:bg-gray-500 hover:bg-opacity-10 "}`}
-                  style={{ borderRadius: "10px" , padding: "16px 0 16px 16px" }}
+                  className={`cursor-pointer ${isSelected ? "bg-gray-700" : "hover:bg-gray-500 hover:bg-opacity-20 "}`}
+                  style={{ borderRadius: "10px" , padding: "16px 10px 16px 16px" }}
                   onClick={handleClick}
             >
             <Flex align="center" style={{ padding: "0", margin:"0" }}>
                     { collapse ?
-                        <Avatar size="6" fallback={getFirstLetter(name)} color="cyan" className="mr-2 ml-0.5 text-3xl" style={{ borderRadius: "50%" }}/>
+                        <Avatar size="6" fallback={getFirstLetter(name)} color="sky" className="mr-2 ml-0.5 text-3xl" style={{ borderRadius: "50%" }}/>
                         :
                         <>
                             <Avatar size="6" fallback={getFirstLetter(name)} color="sky" className="mr-2 text-3xl" style={{ borderRadius: "50%" }}/>
