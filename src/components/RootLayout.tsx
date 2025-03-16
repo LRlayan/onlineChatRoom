@@ -4,10 +4,12 @@ import { FiMenu } from "react-icons/fi";
 import { Button, Layout, theme } from 'antd';
 import {useState} from "react";
 import * as Tabs from "@radix-ui/react-tabs";
-import {Box, Flex} from "@radix-ui/themes";
+import {Box, Flex, DropdownMenu} from "@radix-ui/themes";
 import ChatCard from "./chatCard/chatCard.tsx";
 import { MessageOutlined, TeamOutlined } from "@ant-design/icons";
 import {ChatArea} from "../pages/chatArea.tsx";
+import "@radix-ui/themes/styles.css";
+import { User, Bookmark, Archive, Star, Settings, } from "lucide-react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -33,95 +35,138 @@ const RootLayout: React.FC = () => {
     };
 
     return (
-        <Layout>
-            <Sider trigger={null} collapsible collapsed={collapsed} width={388} collapsedWidth={120}
-                   style={{
-                       background: "#1f252e",
-                   }}
-            >
-                <div className="demo-logo-vertical" />
-                <Button
-                    type="text"
-                    icon={<FiMenu size={27}/>}
-                    style={{
-                        fontSize: '16px',
-                        width: 64,
-                        height: 64,
-                        color: "white",
-                    }}
-                />
-                <Flex direction="column" className="gap-4 justify-center">
-                    <Tabs.Root defaultValue="allChats">
-                        <Tabs.List className="text-white border-b border-gray-700 flex items-center overflow-x-hidden">
-                            <Tabs.Trigger value="allChats" className={`px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500 flex items-center ${collapsed ? "justify-center" : ""}`}>
-                                <MessageOutlined style={{ fontSize: "20px", color: "gray" }} />
-                                {!collapsed && <span className="ml-2">All Chats</span>}
-                            </Tabs.Trigger>
-
-                            <Tabs.Trigger value="Groups" className={`px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500 flex items-center ${collapsed ? "justify-center" : ""}`}>
-                                <TeamOutlined style={{ fontSize: "20px", color: "gray" }} />
-                                {!collapsed && <span className="ml-2">Groups</span>}
-                            </Tabs.Trigger>
-                        </Tabs.List>
-
-                        <Box pt="3" style={{
-                            height: "82.6vh",
-                            overflowY: "auto",
-                            overflowX: "hidden",
-                            scrollBehavior: "smooth",
-                            scrollbarWidth: "thin",
-                            scrollbarColor: "#888 #333",
-                        }}>
-                            {["allChats", "Groups"].map((category) => (
-                                <Tabs.Content key={category} value={category}>
-                                    {chatDetails.filter((data) => category === "allChats" || data.category === category)
-                                        .map((card, index) => (
-                                            <ChatCard
-                                                collapse={collapsed}
-                                                key={index} name={card.name}
-                                                date={card.date}
-                                                lastSeen={card.lastSeen}
-                                                msgStatus={card.msgStatus}
-                                                message={card.messages}
-                                                isSelected={selectedCard === index}
-                                                onClick={() => handleCardClick(index)}
-                                            />
-                                        ))}
-                                </Tabs.Content>
-                            ))}
-                        </Box>
-                    </Tabs.Root>
-                </Flex>
-            </Sider>
-            <Layout style={{ background: "black" }}>
-                <Header style={{ padding: 0, background: "#313a47", }}>
-                    <Button
-                        type="text"
-                        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                        onClick={() => setCollapsed(!collapsed)}
-                        style={{
-                            fontSize: '16px',
-                            width: 64,
-                            height: 64,
-                            color: "white",
-                        }}
-                    />
-                </Header>
-                <Content
-                    style={{
-                        margin: '',
-                        padding: 24,
-                        minHeight: 535,
-                        backgroundImage: "url('/skulls.png')",
-                        backgroundSize: "initial",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "",
-                    }}
+            <Layout>
+                <Sider trigger={null} collapsible collapsed={collapsed} width={388} collapsedWidth={120}
+                       style={{
+                           background: "#1f252e",
+                       }}
                 >
-                    <ChatArea/>
-                </Content>
+                    <div className="demo-logo-vertical" />
+
+                    <DropdownMenu.Root>
+                        <DropdownMenu.Trigger>
+                            <Button
+                                type="text"
+                                icon={<FiMenu size={27}/>}
+                                style={{
+                                    fontSize: '16px',
+                                    width: 64,
+                                    height: 64,
+                                    color: "white",
+                                }}
+                            />
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Content>
+                            <DropdownMenu.Item>
+                                <User className="w-4 h-4 mr-2" /> Profile
+                            </DropdownMenu.Item>
+                            <DropdownMenu.Item>
+                                <Bookmark className="w-4 h-4 mr-2" /> Saved Message
+                            </DropdownMenu.Item>
+                            <DropdownMenu.Separator />
+                            <DropdownMenu.Item>
+                                <Archive className="w-4 h-4 mr-2" /> Archive Chats
+                            </DropdownMenu.Item>
+                            <DropdownMenu.Item>
+                                <Star className="w-4 h-4 mr-2" /> Add to favorites
+                            </DropdownMenu.Item>
+                            <DropdownMenu.Separator />
+                            <DropdownMenu.Sub>
+                                <DropdownMenu.Item>
+                                    <Settings className="w-4 h-4 mr-2" /> Setting
+                                </DropdownMenu.Item>
+                                <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
+                                <DropdownMenu.SubContent>
+                                    <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
+                                    <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
+
+                                    <DropdownMenu.Separator />
+                                    <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
+                                </DropdownMenu.SubContent>
+                            </DropdownMenu.Sub>
+
+                            {/*<DropdownMenu.Separator />*/}
+                            {/*<DropdownMenu.Item>Share</DropdownMenu.Item>*/}
+
+                            {/*<DropdownMenu.Separator />*/}
+                            {/*<DropdownMenu.Item shortcut="⌘ ⌫" color="red">*/}
+                            {/*    Delete*/}
+                            {/*</DropdownMenu.Item>*/}
+                        </DropdownMenu.Content>
+                    </DropdownMenu.Root>
+
+                    <Flex direction="column" className="gap-4 justify-center">
+                        <Tabs.Root defaultValue="allChats">
+                            <Tabs.List className="text-white border-b border-gray-700 flex items-center overflow-x-hidden">
+                                <Tabs.Trigger value="allChats" className={`px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500 flex items-center ${collapsed ? "justify-center" : ""}`}>
+                                    <MessageOutlined style={{ fontSize: "20px", color: "gray" }} />
+                                    {!collapsed && <span className="ml-2">All Chats</span>}
+                                </Tabs.Trigger>
+
+                                <Tabs.Trigger value="Groups" className={`px-4 py-2 border-b-2 border-transparent hover:border-gray-500 data-[state=active]:border-cyan-500 flex items-center ${collapsed ? "justify-center" : ""}`}>
+                                    <TeamOutlined style={{ fontSize: "20px", color: "gray" }} />
+                                    {!collapsed && <span className="ml-2">Groups</span>}
+                                </Tabs.Trigger>
+                            </Tabs.List>
+
+                            <Box pt="3" style={{
+                                height: "82.6vh",
+                                overflowY: "auto",
+                                overflowX: "hidden",
+                                scrollBehavior: "smooth",
+                                scrollbarWidth: "thin",
+                                scrollbarColor: "#888 #333",
+                            }}>
+                                {["allChats", "Groups"].map((category) => (
+                                    <Tabs.Content key={category} value={category}>
+                                        {chatDetails.filter((data) => category === "allChats" || data.category === category)
+                                            .map((card, index) => (
+                                                <ChatCard
+                                                    collapse={collapsed}
+                                                    key={index} name={card.name}
+                                                    date={card.date}
+                                                    lastSeen={card.lastSeen}
+                                                    msgStatus={card.msgStatus}
+                                                    message={card.messages}
+                                                    isSelected={selectedCard === index}
+                                                    onClick={() => handleCardClick(index)}
+                                                />
+                                            ))}
+                                    </Tabs.Content>
+                                ))}
+                            </Box>
+                        </Tabs.Root>
+                    </Flex>
+                </Sider>
+                <Layout style={{ background: "black" }}>
+                    <Header style={{ padding: 0, background: "#313a47", }}>
+                        <Button
+                            type="text"
+                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                            onClick={() => setCollapsed(!collapsed)}
+                            style={{
+                                fontSize: '16px',
+                                width: 64,
+                                height: 64,
+                                color: "white",
+                            }}
+                        />
+                    </Header>
+                    <Content
+                        style={{
+                            margin: '',
+                            padding: 24,
+                            minHeight: 535,
+                            backgroundImage: "url('/skulls.png')",
+                            backgroundSize: "initial",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "",
+                        }}
+                    >
+                        <ChatArea/>
+                    </Content>
+                </Layout>
             </Layout>
-        </Layout>
     );
 };
 
