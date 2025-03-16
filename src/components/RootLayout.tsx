@@ -90,7 +90,7 @@ const RootLayout: React.FC = () => {
                         </Flex>
                     </>
                         ) : (
-                        <ProfileView setShowProfile={setShowProfile} />
+                        <ProfileView collapse={collapsed} setShowProfile={setShowProfile} />
                     )}
                 </Sider>
                 <Layout style={{ background: "black" }}>
