@@ -14,6 +14,7 @@ interface ChatCardProps{
 
 const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msgStatus, message }) => {
     console.log(lastSeen);
+    const getFirstLetter = (name: string): string => name.charAt(0).toUpperCase();
     const getStatusIcon = (status: string) => {
         switch (status) {
             case "sent":
@@ -50,10 +51,10 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
             <Card size="3" style={{ padding: "16px 0 16px 16px" }}>
                 <Flex align="center" style={{ padding: "0", margin:"0" }}>
                     { collapse ?
-                        <Avatar size="6" fallback="T" color="cyan" className="mr-2 ml-0.5 text-3xl" style={{ borderRadius: "50%" }}/>
+                        <Avatar size="6" fallback={getFirstLetter(name)} color="cyan" className="mr-2 ml-0.5 text-3xl" style={{ borderRadius: "50%" }}/>
                         :
                         <>
-                            <Avatar size="6" fallback="T" color="sky" className="mr-2 text-3xl" style={{ borderRadius: "50%" }}/>
+                            <Avatar size="6" fallback={getFirstLetter(name)} color="sky" className="mr-2 text-3xl" style={{ borderRadius: "50%" }}/>
                             <Box>
                                 <Flex align="center" justify="between">
                                     <Text as="div" weight="bold" className="text-amber-50 max-w-96" style={{ fontSize: "16px" }}>
