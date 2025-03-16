@@ -57,7 +57,7 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
     };
 
     return (
-        <Box width="378px" pb="1">
+        <Box className="w-full" pb="1">
             <Card
                 size="3"
                 className={`cursor-pointer ${isSelected ? "bg-gray-700" : "hover:bg-gray-500 hover:bg-opacity-20"}`}
