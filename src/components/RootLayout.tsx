@@ -7,6 +7,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import {Box, Flex} from "@radix-ui/themes";
 import ChatCard from "./chatCard/chatCard.tsx";
 import { MessageOutlined, TeamOutlined } from "@ant-design/icons";
+import {ChatArea} from "../pages/chatArea.tsx";
 
 const { Header, Sider, Content } = Layout;
 
@@ -117,7 +118,7 @@ const RootLayout: React.FC = () => {
                         backgroundRepeat: "",
                     }}
                 >
-                    Content
+                    <ChatArea/>
                 </Content>
             </Layout>
         </Layout>
