@@ -48,7 +48,7 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
 
     return (
         <Box width="378px" p="3">
-            <Card size="3" style={{ padding: "16px 0 16px 16px" }}>
+            <Card size="3" className="hover:bg-gray-500 hover:bg-opacity-10" style={{ borderRadius: "10px" , padding: "16px 0 16px 16px" }}>
                 <Flex align="center" style={{ padding: "0", margin:"0" }}>
                     { collapse ?
                         <Avatar size="6" fallback={getFirstLetter(name)} color="cyan" className="mr-2 ml-0.5 text-3xl" style={{ borderRadius: "50%" }}/>
