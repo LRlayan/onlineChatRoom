@@ -10,11 +10,19 @@ interface ChatCardProps{
     lastSeen: string;
     msgStatus: string;
     message: string;
+    isSelected: boolean;
+    onClick: () => void;
 }
 
-const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msgStatus, message }) => {
+const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msgStatus, message, isSelected, onClick }) => {
+
     console.log(lastSeen);
     const getFirstLetter = (name: string): string => name.charAt(0).toUpperCase();
+
+    const handleClick = () => {
+        onClick();
+    }
+
     const getStatusIcon = (status: string) => {
         switch (status) {
             case "sent":
@@ -48,8 +56,12 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
 
     return (
         <Box width="378px" p="3">
-            <Card size="3" className="hover:bg-gray-500 hover:bg-opacity-10" style={{ borderRadius: "10px" , padding: "16px 0 16px 16px" }}>
-                <Flex align="center" style={{ padding: "0", margin:"0" }}>
+            <Card size="3"
+                  className={`cursor-pointer ${isSelected ? "bg-gray-700" : "hover:bg-gray-500 hover:bg-opacity-10 "}`}
+                  style={{ borderRadius: "10px" , padding: "16px 0 16px 16px" }}
+                  onClick={handleClick}
+            >
+            <Flex align="center" style={{ padding: "0", margin:"0" }}>
                     { collapse ?
                         <Avatar size="6" fallback={getFirstLetter(name)} color="cyan" className="mr-2 ml-0.5 text-3xl" style={{ borderRadius: "50%" }}/>
                         :

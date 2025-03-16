@@ -25,6 +25,11 @@ const RootLayout: React.FC = () => {
     const {
         token: {},
     } = theme.useToken();
+    const [selectedCard, setSelectedCard] = useState<number | null>(null);
+
+    const handleCardClick = (key: number) => {
+        setSelectedCard(prev => prev === key ? null : key);
+    };
 
     return (
         <Layout>
@@ -69,8 +74,17 @@ const RootLayout: React.FC = () => {
                             {["allChats", "Groups"].map((category) => (
                                 <Tabs.Content key={category} value={category}>
                                     {chatDetails.filter((data) => category === "allChats" || data.category === category)
-                                        .map((card) => (
-                                            <ChatCard collapse={collapsed} name={card.name} date={card.date} lastSeen={card.lastSeen} msgStatus={card.msgStatus} message={card.messages}/>
+                                        .map((card, index) => (
+                                            <ChatCard
+                                                collapse={collapsed}
+                                                key={index} name={card.name}
+                                                date={card.date}
+                                                lastSeen={card.lastSeen}
+                                                msgStatus={card.msgStatus}
+                                                message={card.messages}
+                                                isSelected={selectedCard === index}
+                                                onClick={() => handleCardClick(index)}
+                                            />
                                         ))}
                                 </Tabs.Content>
                             ))}
