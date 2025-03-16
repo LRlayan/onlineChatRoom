@@ -1,6 +1,7 @@
 import './App.css'
 import {createBrowserRouter, RouterProvider} from "react-router";
 import RootLayout from "./components/RootLayout.tsx";
+import { Theme } from "@radix-ui/themes";
 
 function App() {
 
@@ -16,7 +17,9 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={routes}/>
+        <Theme appearance="dark">
+            <RouterProvider router={routes}/>
+        </Theme>
     </>
   )
 }
