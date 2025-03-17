@@ -1,9 +1,13 @@
 import React, {useState} from "react";
 import {ArrowLeft} from "lucide-react";
 import {Button, type GetProp, Upload, type UploadFile, type UploadProps} from "antd";
-import {Flex, Text, Tooltip} from "@radix-ui/themes";
+import {Flex, Text, Tooltip, TextField, Box} from "@radix-ui/themes";
 import ImgCrop from "antd-img-crop";
-import { PhoneOutlined, UsergroupAddOutlined, ContactsOutlined } from '@ant-design/icons';
+import {
+    PhoneOutlined,
+    UsergroupAddOutlined,
+    ContactsOutlined,
+} from '@ant-design/icons';
 import { Segmented } from 'antd';
 import ContactCard from "../contactCard/contactCard.tsx";
 
@@ -89,9 +93,9 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                         <Button type="text" icon={<PhoneOutlined color="white" className="text-amber-50" style={{ fontSize: "25px" }}/>} onClick={handleAddContact}/>
                     </Tooltip>
                 </Flex>
-                <Flex justify="center" align="center" className="flex flex-col mt-7 mb-7 text-center">
+                <Flex justify="center" align="center" className="flex flex-col mt-5 mb-7 text-center">
                     <Segmented
-                        className="bg-blue-500 bg-opacity-75 mb-5"
+                        className="bg-blue-500 bg-opacity-75 mb-3"
                         onChange={handleSegmentChange}
                         value={selectedValue}
                         options={[
@@ -109,20 +113,55 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                         style={{ marginRight: collapse ? "19px" : "17px" }}
                     />
                     {selectedValue === "New Rooms" ? (
-                        <ImgCrop rotationSlider>
-                            <Upload
-                                action="http://localhost:3000/upload-image"
-                                listType="picture-circle"
-                                fileList={fileList}
-                                onChange={onChange}
-                                onPreview={onPreview}
-                                beforeUpload={handleBeforeUpload}
-                                className="text-blue-500"
-                            >
-                                {fileList.length < 1 && '+ Upload'}
-                            </Upload>
-                        </ImgCrop>
-                        ) : (
+                        <>
+                            <Flex align="center" className="mr-4 mb-3">
+                                <ImgCrop rotationSlider>
+                                    <Upload
+                                        action="http://localhost:3000/upload-image"
+                                        listType="picture-circle"
+                                        fileList={fileList}
+                                        onChange={onChange}
+                                        onPreview={onPreview}
+                                        beforeUpload={handleBeforeUpload}
+                                        className="text-blue-500"
+                                    >
+                                        {fileList.length < 1 && '+ Upload'}
+                                    </Upload>
+                                </ImgCrop>
+                            </Flex>
+                            <Flex gapY={"1"} className="flex flex-col ml-0 bg-gray-500 bg-opacity-25 rounded-lg pr-5 pl-5 pt-0 pb-3 mr-4">
+                                <Flex align="center" className="items-center pr-0 pl-0 pt-3 rounded-lg">
+                                    <Flex direction="column" gap="1" maxWidth="300px">
+                                        <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>Room Name</Text>
+                                        <TextField.Root size="2" variant="soft" placeholder="room name" style={{ width: "250px" }} />
+                                    </Flex>
+                                </Flex>
+                                <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>Select Contact</Text>
+                                <Box
+                                    style={{
+                                        height: "41.4vh",
+                                        overflowY: "auto",
+                                        overflowX: "hidden",
+                                        scrollBehavior: "smooth",
+                                        scrollbarWidth: "thin",
+                                        scrollbarColor: "#888 #333",
+                                    }}>
+                                    {contactDetails.map((contact, index) => {
+                                        return (
+                                            <ContactCard
+                                                key={index}
+                                                collapse={collapse}
+                                                name={contact.name}
+                                                bio={contact.bio}
+                                                profile={contact.profile}
+                                                onClick={() => handleContactCard(contact)}
+                                            />
+                                        );
+                                    })}
+                                </Box>
+                            </Flex>
+                        </>
+                    ) : (
                             <div className="w-full pr-4" style={{
                                 height: "74vh",
                                 overflowY: "auto",
