@@ -24,7 +24,7 @@ const contactDetails = [
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-const CreateRooms: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse }) => {
+const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse }) => {
 
     const [selectedValue, setSelectedValue] = useState("New Contact");
 
@@ -90,13 +90,23 @@ const CreateRooms: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                     </Tooltip>
                 </Flex>
                 <Flex justify="center" align="center" className="flex flex-col mt-7 mb-7 text-center">
-                    <Segmented className="bg-blue-500 bg-opacity-75 mb-5"
+                    <Segmented
+                        className="bg-blue-500 bg-opacity-75 mb-5"
                         onChange={handleSegmentChange}
                         value={selectedValue}
                         options={[
-                            { label: 'New Contact', value: 'New Contact', icon: <BarsOutlined /> },
-                            { label: 'New Rooms', value: 'New Rooms', icon: <AppstoreOutlined /> },
+                            {
+                                label: collapse ? <BarsOutlined /> : 'New Contact',
+                                value: 'New Contact',
+                                icon: collapse ? undefined : <BarsOutlined />
+                            },
+                            {
+                                label: collapse ? <AppstoreOutlined /> : 'New Rooms',
+                                value: 'New Rooms',
+                                icon: collapse ? undefined : <AppstoreOutlined />
+                            },
                         ]}
+                        style={{ marginRight: collapse ? "19px" : "17px" }}
                     />
                     {selectedValue === "New Rooms" ? (
                         <ImgCrop rotationSlider>
@@ -122,10 +132,11 @@ const CreateRooms: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                 scrollbarColor: "#888 #333",
                             }}
                             >
-                                {contactDetails.map((contact) => {
+                                {contactDetails.map((contact, index) => {
                                     return (
                                         <ContactCard
-                                            key={contact.name}
+                                            key={index}
+                                            collapse={collapse}
                                             name={contact.name}
                                             bio={contact.bio}
                                             profile={contact.profile}
@@ -142,4 +153,4 @@ const CreateRooms: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
     )
 }
 
-export default CreateRooms;
+export default CreateChats;
