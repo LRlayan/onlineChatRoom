@@ -12,7 +12,7 @@ import { Segmented } from 'antd';
 import ContactCard from "../contactCard/contactCard.tsx";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "../../store/store.ts";
-import {changeSegment} from "../../reducer/segments.ts";
+import {changeSegment} from "../../reducer/segmentsSlice.ts";
 import RoomDataForm from "./roomDataForm/roomDataForm.tsx";
 
 interface CreateRoomsProps {

@@ -13,7 +13,7 @@ import ProfileView from "./profileView/profileView.tsx";
 import {PlusIcon} from "lucide-react";
 import CreateChats from "./createChats/createChats.tsx";
 import {useDispatch, useSelector} from "react-redux";
-import {changeSegment, SegmentsRootState} from "../reducer/segments.ts";
+import {changeSegment, SegmentsRootState} from "../reducer/segmentsSlice.ts";
 import {AppDispatch} from "../store/store.ts";
 import RoomDataForm from "./createChats/roomDataForm/roomDataForm.tsx";
 
