@@ -11,7 +11,7 @@ interface ContactProps {
     onClick: () => void;
 }
 
-const ContactCard: React.FC<ContactProps> = ({ collapse, selectedSegment, name, bio, profile, onClick }) => {
+const ContactCard: React.FC<ContactProps> = ({collapse, selectedSegment, name, bio, profile, onClick}) => {
     const [isSelected, setSelected] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -27,7 +27,7 @@ const ContactCard: React.FC<ContactProps> = ({ collapse, selectedSegment, name, 
         }
     }
 
-    return(
+    return (
         <>
             <Box maxWidth="370px">
                 {collapse ? (
@@ -35,7 +35,7 @@ const ContactCard: React.FC<ContactProps> = ({ collapse, selectedSegment, name, 
                         <Card
                             className="mb-1 hover:bg-gray-500"
                             onClick={handleContactCard}
-                            style={{ cursor: 'pointer' }}
+                            style={{cursor: 'pointer'}}
                         >
                             <Flex gap="4" align="center">
                                 <Avatar
@@ -43,7 +43,7 @@ const ContactCard: React.FC<ContactProps> = ({ collapse, selectedSegment, name, 
                                     src={profile}
                                     radius="full"
                                     fallback={getFirstLetter(name)}
-                                    style={{ marginLeft: collapse ? "6px" : "" }}
+                                    style={{marginLeft: collapse ? "6px" : ""}}
                                 />
                             </Flex>
                         </Card>
@@ -53,7 +53,7 @@ const ContactCard: React.FC<ContactProps> = ({ collapse, selectedSegment, name, 
                     <Card
                         className={`mb-1 hover:bg-gray-500 ${isSelected && count === 1 ? "border-2 border-cyan-300" : "border-0"}`}
                         onClick={handleContactCard}
-                        style={{ cursor: 'pointer' }}
+                        style={{cursor: 'pointer'}}
                     >
                         <Flex gap="4" align="center">
                             <Avatar
