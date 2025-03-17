@@ -3,13 +3,15 @@ import { MenuFoldOutlined, MenuUnfoldOutlined, } from '@ant-design/icons';
 import { Button, Layout, theme } from 'antd';
 import {useState} from "react";
 import * as Tabs from "@radix-ui/react-tabs";
-import {Box, Flex, } from "@radix-ui/themes";
+import {Box, Flex, Tooltip, IconButton } from "@radix-ui/themes";
 import ChatCard from "./chatCard/chatCard.tsx";
 import { MessageOutlined, TeamOutlined } from "@ant-design/icons";
 import {ChatArea} from "../pages/chatArea.tsx";
 import "@radix-ui/themes/styles.css";
 import DropdownMenuSet from "./dropdownMenu/dropdownMenu.tsx";
 import ProfileView from "./profileView/profileView.tsx";
+import {PlusIcon} from "lucide-react";
+import CreateRooms from "./createRooms/createRooms.tsx";
 
 const { Header, Sider, Content } = Layout;
 
@@ -30,10 +32,16 @@ const RootLayout: React.FC = () => {
     } = theme.useToken();
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
     const [showProfile, setShowProfile] = useState(false);
+    const [showCreateRooms, setCreateRooms] = useState(false);
 
     const handleCardClick = (key: number) => {
         setSelectedCard(prev => prev === key ? null : key);
     };
+
+    const handleCreateRoomBtn = () => {
+        setCreateRooms(true);
+        setShowProfile(false);
+    }
 
     return (
             <Layout>
@@ -42,7 +50,7 @@ const RootLayout: React.FC = () => {
                            background: "#1f252e",
                        }}
                 >
-                    {!showProfile ? (
+                    {!showProfile && !showCreateRooms ? (
                     <>
                         <div className="demo-logo-vertical" />
                         <DropdownMenuSet setShowProfile={setShowProfile} />
@@ -85,13 +93,22 @@ const RootLayout: React.FC = () => {
                                                 ))}
                                         </Tabs.Content>
                                     ))}
+                                    <div className="absolute bottom-4 right-6" onClick={handleCreateRoomBtn}>
+                                        <Tooltip content="Creat a Room">
+                                            <IconButton radius="full" style={{ background: "#3392ff", width: "50px", height: "50px"}}>
+                                                <PlusIcon size={24}/>
+                                            </IconButton>
+                                        </Tooltip>
+                                    </div>
                                 </Box>
                             </Tabs.Root>
                         </Flex>
                     </>
-                        ) : (
+                    ) : !showCreateRooms && showProfile ? (
                         <ProfileView collapse={collapsed} setShowProfile={setShowProfile} />
-                    )}
+                    ) : !showProfile && showCreateRooms ? (
+                        <CreateRooms collapse={collapsed} setShowCreateRooms={setCreateRooms}/>
+                    ): ""}
                 </Sider>
                 <Layout style={{ background: "black" }}>
                     <Header style={{ padding: 0, background: "#313a47", }}>
