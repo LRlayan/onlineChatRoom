@@ -3,7 +3,7 @@ import {ArrowLeft} from "lucide-react";
 import {Button, type GetProp, Upload, type UploadFile, type UploadProps} from "antd";
 import {Flex, Text, Tooltip} from "@radix-ui/themes";
 import ImgCrop from "antd-img-crop";
-import { AppstoreOutlined, BarsOutlined, PhoneOutlined } from '@ant-design/icons';
+import { PhoneOutlined, UsergroupAddOutlined, ContactsOutlined } from '@ant-design/icons';
 import { Segmented } from 'antd';
 import ContactCard from "../contactCard/contactCard.tsx";
 
@@ -96,14 +96,14 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                         value={selectedValue}
                         options={[
                             {
-                                label: collapse ? <BarsOutlined /> : 'New Contact',
+                                label: collapse ? <ContactsOutlined /> : 'New Contact',
                                 value: 'New Contact',
-                                icon: collapse ? undefined : <BarsOutlined />
+                                icon: collapse ? undefined : <ContactsOutlined />
                             },
                             {
-                                label: collapse ? <AppstoreOutlined /> : 'New Rooms',
+                                label: collapse ? <UsergroupAddOutlined /> : 'New Rooms',
                                 value: 'New Rooms',
-                                icon: collapse ? undefined : <AppstoreOutlined />
+                                icon: collapse ? undefined : <UsergroupAddOutlined />
                             },
                         ]}
                         style={{ marginRight: collapse ? "19px" : "17px" }}
