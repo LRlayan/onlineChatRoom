@@ -139,7 +139,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                 <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>Select Contact</Text>
                                 <Box
                                     style={{
-                                        height: "41.4vh",
+                                        height: "39vh",
                                         overflowY: "auto",
                                         overflowX: "hidden",
                                         scrollBehavior: "smooth",
@@ -151,6 +151,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                             <ContactCard
                                                 key={index}
                                                 collapse={collapse}
+                                                selectedSegment={selectedValue}
                                                 name={contact.name}
                                                 bio={contact.bio}
                                                 profile={contact.profile}
@@ -176,6 +177,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                         <ContactCard
                                             key={index}
                                             collapse={collapse}
+                                            selectedSegment={selectedValue}
                                             name={contact.name}
                                             bio={contact.bio}
                                             profile={contact.profile}

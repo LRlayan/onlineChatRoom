@@ -1,19 +1,30 @@
-import React from "react";
+import React, {useState} from "react";
 import {Flex, Text, Card, Box, Avatar, Tooltip} from "@radix-ui/themes";
 import {getFirstLetter} from "../../../util/splitName.ts";
 
 interface ContactProps {
     collapse: boolean;
+    selectedSegment: string;
     name: string;
     bio: string;
     profile: string;
     onClick: () => void;
 }
 
-const ContactCard: React.FC<ContactProps> = ({ collapse, name, bio, profile, onClick }) => {
+const ContactCard: React.FC<ContactProps> = ({ collapse, selectedSegment, name, bio, profile, onClick }) => {
+    const [isSelected, setSelected] = useState(false);
+    const [count, setCount] = useState(0);
 
     const handleContactCard = () => {
         onClick();
+        if (selectedSegment === "New Rooms") {
+            setSelected(true);
+            if (count === 0) {
+                setCount(1);
+            } else {
+                setCount(0);
+            }
+        }
     }
 
     return(
@@ -40,7 +51,7 @@ const ContactCard: React.FC<ContactProps> = ({ collapse, name, bio, profile, onC
                 ) : (
                     // Show Card normally when not collapsed
                     <Card
-                        className="mb-1 hover:bg-gray-500"
+                        className={`mb-1 hover:bg-gray-500 ${isSelected && count === 1 ? "border-2 border-cyan-300" : "border-0"}`}
                         onClick={handleContactCard}
                         style={{ cursor: 'pointer' }}
                     >
