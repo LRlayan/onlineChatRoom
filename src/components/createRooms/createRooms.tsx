@@ -73,6 +73,10 @@ const CreateRooms: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
         setSelectedValue(value);
     }
 
+    const handleContactCard = (contact: {name: string, bio: string, profile: string}) => {
+        console.log("Clicked on contact:", contact);
+    }
+
     return(
         <>
             <div className="pl-4 pt-4 text-white">
@@ -116,9 +120,18 @@ const CreateRooms: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                 scrollBehavior: "smooth",
                                 scrollbarWidth: "thin",
                                 scrollbarColor: "#888 #333",
-                            }}>
+                            }}
+                            >
                                 {contactDetails.map((contact) => {
-                                    return <ContactCard key={contact.name} name={contact.name} bio={contact.bio} profile={contact.profile} />;
+                                    return (
+                                        <ContactCard
+                                            key={contact.name}
+                                            name={contact.name}
+                                            bio={contact.bio}
+                                            profile={contact.profile}
+                                            onClick={() => handleContactCard(contact)}
+                                        />
+                                    );
                                 })}
                             </div>
                         )
