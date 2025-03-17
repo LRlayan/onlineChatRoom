@@ -11,7 +11,7 @@ import "@radix-ui/themes/styles.css";
 import DropdownMenuSet from "./dropdownMenu/dropdownMenu.tsx";
 import ProfileView from "./profileView/profileView.tsx";
 import {PlusIcon} from "lucide-react";
-import CreateRooms from "./createRooms/createRooms.tsx";
+import CreateChats from "./createRooms/createChats.tsx";
 
 const { Header, Sider, Content } = Layout;
 
@@ -107,7 +107,7 @@ const RootLayout: React.FC = () => {
                     ) : !showCreateRooms && showProfile ? (
                         <ProfileView collapse={collapsed} setShowProfile={setShowProfile} />
                     ) : !showProfile && showCreateRooms ? (
-                        <CreateRooms collapse={collapsed} setShowCreateRooms={setCreateRooms}/>
+                        <CreateChats collapse={collapsed} setShowCreateRooms={setCreateRooms}/>
                     ): ""}
                 </Sider>
                 <Layout style={{ background: "black" }}>
