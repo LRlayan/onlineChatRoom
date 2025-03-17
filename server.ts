@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 const { Server } = require("socket.io");
 import { createServer } from 'http';
+import chatRoutes from "./routes/chat-routes";
 
 dotenv.config();
 const app = express();
@@ -47,6 +48,8 @@ mongoose.connect("mongodb://localhost:27017/chatRoom")
     .catch(err => {
         console.error("Failed to connect to MongoDB", err);
 });
+
+app.use('/api/v1/chat', chatRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server start 5000"))
