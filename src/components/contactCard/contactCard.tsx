@@ -6,13 +6,19 @@ interface ContactProps {
     name: string;
     bio: string;
     profile: string;
+    onClick: () => void;
 }
 
-const ContactCard: React.FC<ContactProps> = ({ name, bio, profile }) => {
+const ContactCard: React.FC<ContactProps> = ({ name, bio, profile, onClick }) => {
+
+    const handleContactCard = () => {
+        onClick();
+    }
+
     return(
         <>
             <Box maxWidth="370px">
-                <Card className="mb-1">
+                <Card className="mb-1 hover:bg-gray-500" onClick={handleContactCard} style={{ cursor: 'pointer' }}>
                     <Flex gap="4" align="center">
                         <Avatar
                             size="3"
