@@ -3,7 +3,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined, } from '@ant-design/icons';
 import { Button, Layout, theme } from 'antd';
 import {useState} from "react";
 import * as Tabs from "@radix-ui/react-tabs";
-import {Box, Flex, Tooltip, IconButton } from "@radix-ui/themes";
+import {Box, Flex, Tooltip, IconButton, Dialog,} from "@radix-ui/themes";
 import ChatCard from "./chatCard/chatCard.tsx";
 import { MessageOutlined, TeamOutlined } from "@ant-design/icons";
 import {ChatArea} from "../pages/chatArea.tsx";
@@ -11,7 +11,11 @@ import "@radix-ui/themes/styles.css";
 import DropdownMenuSet from "./dropdownMenu/dropdownMenu.tsx";
 import ProfileView from "./profileView/profileView.tsx";
 import {PlusIcon} from "lucide-react";
-import CreateChats from "./createRooms/createChats.tsx";
+import CreateChats from "./createChats/createChats.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import {changeSegment, SegmentsRootState} from "../reducer/segments.ts";
+import {AppDispatch} from "../store/store.ts";
+import RoomDataForm from "./createChats/roomDataForm/roomDataForm.tsx";
 
 const { Header, Sider, Content } = Layout;
 
@@ -27,6 +31,9 @@ const chatDetails = [
 
 const RootLayout: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
+    const selectSegment = useSelector((state: SegmentsRootState) => state.segment.segment);
+    const isCollapse = useSelector((state: SegmentsRootState) => state.segment.collapse);
+    const dispatch = useDispatch<AppDispatch>();
     const {
         token: {},
     } = theme.useToken();
@@ -41,6 +48,32 @@ const RootLayout: React.FC = () => {
     const handleCreateRoomBtn = () => {
         setCreateRooms(true);
         setShowProfile(false);
+    }
+
+    const handleCollapseBtn1 = () => {
+        setCollapsed(true);
+    }
+
+    const handleCollapseBtn2= () => {
+        setCollapsed(!collapsed);
+        if (isCollapse) {
+            dispatch(changeSegment({ segment: "New Rooms" , collapse: true}));
+        }
+    }
+
+    const handleCollapseBtn3= () => {
+        setCollapsed(!collapsed);
+        if (isCollapse) {
+            dispatch(changeSegment({ segment: "New Rooms" , collapse: true}));
+        }
+    }
+
+    const handleModalCancelBtn = () => {
+        dispatch(changeSegment({ segment: "New Contact", collapse: true}));
+    }
+
+    const handleModalSaveBtn = () => {
+        dispatch(changeSegment({ segment: "New Contact", collapse: true}));
     }
 
     return (
@@ -112,17 +145,72 @@ const RootLayout: React.FC = () => {
                 </Sider>
                 <Layout style={{ background: "black" }}>
                     <Header style={{ padding: 0, background: "#313a47", }}>
-                        <Button
-                            type="text"
-                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                            onClick={() => setCollapsed(!collapsed)}
-                            style={{
-                                fontSize: '16px',
-                                width: 64,
-                                height: 64,
-                                color: "white",
-                            }}
-                        />
+                        { selectSegment === "New Rooms" && isCollapse ?
+                            (
+                                <Dialog.Root>
+                                    <Dialog.Trigger>
+                                        <Button
+                                            type="text"
+                                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                            onClick={handleCollapseBtn1}
+                                            style={{
+                                                fontSize: '16px',
+                                                width: 64,
+                                                height: 64,
+                                                color: "white",
+                                            }}
+                                        />
+                                    </Dialog.Trigger>
+
+                                    <Dialog.Content maxWidth="450px">
+                                        <Dialog.Title>Create Rooms</Dialog.Title>
+                                        <Dialog.Description size="2" mb="4">
+                                            Fill the form for your room.
+                                        </Dialog.Description>
+
+                                        <RoomDataForm collapse={collapsed} selectedValue={selectSegment}/>
+
+                                        <Flex gap="3" mt="4" justify="end">
+                                            <Dialog.Close>
+                                                <Button onClick={handleModalCancelBtn}>
+                                                    Cancel
+                                                </Button>
+                                            </Dialog.Close>
+                                            <Dialog.Close>
+                                                <Button onClick={handleModalSaveBtn}>Save</Button>
+                                            </Dialog.Close>
+                                        </Flex>
+                                    </Dialog.Content>
+                                </Dialog.Root>
+
+                            ) : selectSegment === "New Contact" && !isCollapse ? (
+                                <Button
+                                    type="text"
+                                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                    onClick={handleCollapseBtn2}
+                                    style={{
+                                        fontSize: '16px',
+                                        width: 64,
+                                        height: 64,
+                                        color: "white",
+                                    }}
+                                />
+                            ) : (
+                    <Button
+                        type="text"
+                        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                        onClick={handleCollapseBtn3}
+                        style={{
+                            fontSize: '16px',
+                            width: 64,
+                            height: 64,
+                            color: "white",
+                        }}
+                    />
+
+
+                            )
+                        }
                     </Header>
                     <Content
                         style={{
