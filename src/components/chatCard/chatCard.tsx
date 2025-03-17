@@ -5,6 +5,7 @@ import { CheckOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { theme } from 'antd';
 import "@radix-ui/themes/styles.css";
 import {Archive, Bookmark, Star, } from "lucide-react";
+import {getFirstLetter} from "../../../util/splitName.ts";
 
 interface ChatCardProps {
     collapse: boolean;
@@ -22,8 +23,6 @@ const ChatCard: React.FC<ChatCardProps> = ({ collapse, name, date, lastSeen, msg
     const {
         token: {},
     } = theme.useToken();
-
-    const getFirstLetter = (name: string): string => name.charAt(0).toUpperCase();
 
     const handleClick = () => {
         onClick();
