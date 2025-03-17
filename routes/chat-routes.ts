@@ -10,4 +10,9 @@ chatRoutes.post("/saveRoom", async (req, res) => {
     res.json(newRoom);
 });
 
+chatRoutes.post("/getRoom", async (req,res) => {
+    const rooms = await RoomSchema.find();
+    res.json(rooms);
+});
+
 export default chatRoutes;
