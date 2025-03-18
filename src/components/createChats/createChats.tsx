@@ -141,7 +141,9 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                     </Upload>
                                 </ImgCrop>
                             </Flex>
-                            <RoomDataForm collapse={collapse} selectedValue={selectedValue} />
+                            { !collapse &&
+                                <RoomDataForm collapse={collapse} selectedValue={selectedValue} />
+                            }
                         </>
                     ) : (
                             <div className="w-full pr-4" style={{
@@ -171,36 +173,6 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                     }
                 </Flex>
             </div>
-
-            {/* Create Rooms Modal - if collapse */}
-            {/*{ modalOpen &&*/}
-            {/*    <ConfigProvider*/}
-            {/*        theme={{*/}
-            {/*            token: {*/}
-            {/*                colorBgElevated: "",*/}
-            {/*                colorText: "#ffffff",*/}
-            {/*                colorPrimary: "",*/}
-            {/*            },*/}
-            {/*        }}*/}
-            {/*    >*/}
-            {/*        <Modal*/}
-            {/*            title="Created Rooms"*/}
-            {/*            centered*/}
-            {/*            className="dark-modal"*/}
-            {/*            open={modalOpen}*/}
-            {/*            onOk={() => setModalOpen(false)}*/}
-            {/*            onCancel={() => setModalOpen(false)}*/}
-            {/*            style={{*/}
-            {/*                background: "#131517",*/}
-            {/*                color:"#ffffff",*/}
-            {/*                borderRadius: "12px",*/}
-            {/*                overflow: "hidden",*/}
-            {/*            }}*/}
-            {/*        >*/}
-
-            {/*        </Modal>*/}
-            {/*    </ConfigProvider>*/}
-            {/*}*/}
         </>
     )
 }
