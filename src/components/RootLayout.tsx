@@ -40,6 +40,7 @@ const RootLayout: React.FC = () => {
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
     const [showProfile, setShowProfile] = useState(false);
     const [showCreateRooms, setCreateRooms] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleCardClick = (key: number) => {
         setSelectedCard(prev => prev === key ? null : key);
@@ -147,7 +148,12 @@ const RootLayout: React.FC = () => {
                     <Header style={{ padding: 0, background: "#313a47", }}>
                         { selectSegment === "New Rooms" && isCollapse ?
                             (
-                                <Dialog.Root>
+                                <Dialog.Root open={isOpen} onOpenChange={(open) => {
+                                    setIsOpen(open);
+                                    if (!open) {
+                                        handleModalCancelBtn();
+                                    }
+                                }}>
                                     <Dialog.Trigger>
                                         <Button
                                             type="text"
