@@ -162,22 +162,22 @@ const RootLayout: React.FC = () => {
                                         />
                                     </Dialog.Trigger>
 
-                                    <Dialog.Content maxWidth="450px">
+                                    <Dialog.Content maxWidth="450px" style={{ paddingLeft: "40px" }}>
                                         <Dialog.Title>Create Rooms</Dialog.Title>
                                         <Dialog.Description size="2" mb="4">
                                             Fill the form for your room.
                                         </Dialog.Description>
 
-                                        <RoomDataForm collapse={!collapsed} selectedValue={selectSegment}/>
+                                        <RoomDataForm collapse={!collapsed} selectedValue={selectSegment} sizeTextField={"330px"}/>
 
                                         <Flex gap="3" mt="4" justify="end">
                                             <Dialog.Close>
-                                                <Button onClick={handleModalCancelBtn}>
+                                                <Button className="bg-blue-500 bg-opacity-70 hover:bg-blue-300 text-amber-50" onClick={handleModalCancelBtn}>
                                                     Cancel
                                                 </Button>
                                             </Dialog.Close>
                                             <Dialog.Close>
-                                                <Button onClick={handleModalSaveBtn}>Save</Button>
+                                                <Button className="bg-blue-500 bg-opacity-70 hover:bg-blue-300 text-amber-50" onClick={handleModalSaveBtn}>Save</Button>
                                             </Dialog.Close>
                                         </Flex>
                                     </Dialog.Content>
