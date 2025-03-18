@@ -1,13 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {ArrowLeft} from "lucide-react";
 import {Button, type GetProp, Upload, type UploadFile, type UploadProps} from "antd";
-import {Flex, Text, Tooltip,} from "@radix-ui/themes";
+import {Dialog, Flex, Text, TextField,} from "@radix-ui/themes";
 import ImgCrop from "antd-img-crop";
-import {
-    PhoneOutlined,
-    UsergroupAddOutlined,
-    ContactsOutlined,
-} from '@ant-design/icons';
+import {PhoneOutlined, UsergroupAddOutlined, ContactsOutlined,} from '@ant-design/icons';
 import { Segmented } from 'antd';
 import ContactCard from "../contactCard/contactCard.tsx";
 import {useDispatch} from "react-redux";
@@ -93,6 +89,10 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
         console.log("Clicked on contact:", contact);
     }
 
+    const handleModalCancelBtn = () => {}
+
+    const handleModalSaveBtn = () => {}
+
     return(
         <>
             <div className="pl-4 pt-4 text-white">
@@ -101,9 +101,44 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                             style={{fontSize: '20px', color: "white", alignSelf: "start"}}
                     />
                     <Text style={{fontSize: "24px", font: "icon", display: collapse ? 'none' : ''}}>New Chat</Text>
-                    <Tooltip content="Add To Contact">
-                        <Button type="text" icon={<PhoneOutlined color="white" className="text-amber-50 mr-8" style={{ fontSize: "25px" }}/>} onClick={handleAddContact}/>
-                    </Tooltip>
+                    <Dialog.Root>
+                        <Dialog.Trigger>
+                                <Button type="text" icon={<PhoneOutlined color="white" className="text-amber-50 mr-8" style={{ fontSize: "25px" }}/>}
+                                        onClick={handleAddContact}
+                                />
+                        </Dialog.Trigger>
+
+                        <Dialog.Content maxWidth="450px">
+                            <Dialog.Title>Add to new contact</Dialog.Title>
+                            <Dialog.Description size="2" mb="4">
+                                Fill the form for new contact.
+                            </Dialog.Description>
+
+                            <Flex gapY={"1"} className="flex flex-col ml-0 bg-gray-500 bg-opacity-25 rounded-lg pr-5 pl-5 pt-0 pb-4">
+                                <Flex align="center" className="items-center pr-0 pl-0 pt-3 rounded-lg">
+                                    <Flex direction="column" gap="1" maxWidth="300px">
+                                        <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>First Name</Text>
+                                        <TextField.Root size="2" variant="soft" placeholder="room name" style={{ width: "360px", }} />
+                                        <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>Last Name</Text>
+                                        <TextField.Root size="2" variant="soft" placeholder="room name" style={{ width: "360px" }} />
+                                        <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>Email</Text>
+                                        <TextField.Root size="2" variant="soft" placeholder="room name" style={{ width: "360px" }} />
+                                    </Flex>
+                                </Flex>
+                            </Flex>
+
+                            <Flex gap="3" mt="4" justify="end">
+                                <Dialog.Close>
+                                    <Button className="bg-blue-500 bg-opacity-70 hover:bg-blue-300 text-amber-50" onClick={handleModalCancelBtn}>
+                                        Cancel
+                                    </Button>
+                                </Dialog.Close>
+                                <Dialog.Close>
+                                    <Button className="bg-blue-500 bg-opacity-70 hover:bg-blue-300 text-amber-50" onClick={handleModalSaveBtn}>Save</Button>
+                                </Dialog.Close>
+                            </Flex>
+                        </Dialog.Content>
+                    </Dialog.Root>
                 </Flex>
                 <Flex justify="center" align="center" className="flex flex-col mt-5 mb-7 text-center">
                     <Segmented
@@ -142,7 +177,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                 </ImgCrop>
                             </Flex>
                             { !collapse &&
-                                <RoomDataForm collapse={collapse} selectedValue={selectedValue} />
+                                <RoomDataForm collapse={collapse} selectedValue={selectedValue} sizeTextField={"250px"}/>
                             }
                         </>
                     ) : (
