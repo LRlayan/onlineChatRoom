@@ -1,12 +1,21 @@
 import React from "react";
 import {Box, Flex, Text, TextField} from "@radix-ui/themes";
 import ContactCard from "../../contactCard/contactCard.tsx";
-import {contactDetails} from "../createChats.tsx";
 
 interface RoomDataFormProps {
     collapse: boolean;
     selectedValue: string;
 }
+
+const contactDetails = [
+    {name: "Amodh", email: "amodh@gmail.com", bio: "Software", profile: ""},
+    {name: "Kavindu", email: "kavi@gmail.com", bio: "Software Dev", profile: ""},
+    {name: "Tharusha", email: "capa@gmail.com", bio: "Software Engineering", profile: ""},
+    {name: "Nishan", email: "nisha@gmail.com", bio: "Developer", profile: ""},
+    {name: "Eranga", email: "era@gmail.com", bio: "fullstack dev", profile: ""},
+    {name: "Saminda", email: "sami@gmail.com", bio: "Bekaray ", profile: ""},
+    {name: "Sandul", email: "sandul@gmail.com", bio: "Hichchi guide", profile: ""},
+];
 
 const RoomDataForm: React.FC<RoomDataFormProps> = ({ collapse, selectedValue }) => {
 
