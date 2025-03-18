@@ -42,6 +42,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
 
     const handleArrowBtn = () => {
         setShowCreateRooms(false);
+        dispatch(changeSegment({ segment: "", collapse: false }));
     }
 
     const [fileList, setFileList] = useState<UploadFile[]>([
