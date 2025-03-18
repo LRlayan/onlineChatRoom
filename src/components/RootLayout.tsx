@@ -168,7 +168,7 @@ const RootLayout: React.FC = () => {
                                             Fill the form for your room.
                                         </Dialog.Description>
 
-                                        <RoomDataForm collapse={collapsed} selectedValue={selectSegment}/>
+                                        <RoomDataForm collapse={!collapsed} selectedValue={selectSegment}/>
 
                                         <Flex gap="3" mt="4" justify="end">
                                             <Dialog.Close>
