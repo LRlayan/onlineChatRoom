@@ -20,7 +20,7 @@ interface CreateRoomsProps {
     setShowCreateRooms: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const contactDetails = [
+const contactDetails = [
     {name: "Amodh", email: "amodh@gmail.com", bio: "Software", profile: ""},
     {name: "Kavindu", email: "kavi@gmail.com", bio: "Software Dev", profile: ""},
     {name: "Tharusha", email: "capa@gmail.com", bio: "Software Engineering", profile: ""},
