@@ -5,6 +5,7 @@ import ContactCard from "../../contactCard/contactCard.tsx";
 interface RoomDataFormProps {
     collapse: boolean;
     selectedValue: string;
+    sizeTextField: string;
 }
 
 const contactDetails = [
@@ -17,7 +18,7 @@ const contactDetails = [
     {name: "Sandul", email: "sandul@gmail.com", bio: "Hichchi guide", profile: ""},
 ];
 
-const RoomDataForm: React.FC<RoomDataFormProps> = ({ collapse, selectedValue }) => {
+const RoomDataForm: React.FC<RoomDataFormProps> = ({ collapse, selectedValue, sizeTextField }) => {
 
     const handleContactCard = (contact: {name: string, bio: string, profile: string}) => {
         console.log("Clicked on contact:", contact);
@@ -29,7 +30,7 @@ const RoomDataForm: React.FC<RoomDataFormProps> = ({ collapse, selectedValue }) 
                 <Flex align="center" className="items-center pr-0 pl-0 pt-3 rounded-lg">
                     <Flex direction="column" gap="1" maxWidth="300px">
                         <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>Room Name</Text>
-                        <TextField.Root size="2" variant="soft" placeholder="room name" style={{ width: "250px" }} />
+                        <TextField.Root size="2" variant="soft" placeholder="room name" style={{ width: `${sizeTextField}`}} />
                     </Flex>
                 </Flex>
                 <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>Select Contact</Text>
