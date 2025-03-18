@@ -18,7 +18,7 @@ const ContactCard: React.FC<ContactProps> = ({collapse, selectedSegment, name, b
     const handleContactCard = () => {
         onClick();
         if (selectedSegment === "New Rooms") {
-            setSelected(true);
+            setSelected(!isSelected);
             if (count === 0) {
                 setCount(1);
             } else {
@@ -49,7 +49,6 @@ const ContactCard: React.FC<ContactProps> = ({collapse, selectedSegment, name, b
                         </Card>
                     </Tooltip>
                 ) : (
-                    // Show Card normally when not collapsed
                     <Card
                         className={`mb-1 hover:bg-gray-500 ${isSelected && count === 1 ? "border-2 border-cyan-300" : "border-0"}`}
                         onClick={handleContactCard}
