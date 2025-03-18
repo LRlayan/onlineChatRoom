@@ -16,11 +16,11 @@ const ContactCard: React.FC<ContactProps> = ({collapse, selectedSegment, name, b
     const [count, setCount] = useState(0);
 
     const handleContactCard = () => {
-        onClick();
         if (selectedSegment === "New Rooms") {
             setSelected(!isSelected);
             if (count === 0) {
                 setCount(1);
+                onClick();
             } else {
                 setCount(0);
             }
