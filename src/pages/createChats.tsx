@@ -5,11 +5,13 @@ import {Dialog, Flex, Text, TextField,} from "@radix-ui/themes";
 import ImgCrop from "antd-img-crop";
 import {PhoneOutlined, UsergroupAddOutlined, ContactsOutlined,} from '@ant-design/icons';
 import { Segmented } from 'antd';
-import ContactCard from "../contactCard/contactCard.tsx";
+import ContactCard from "../components/contactCard/contactCard.tsx";
 import {useDispatch} from "react-redux";
-import {AppDispatch} from "../../store/store.ts";
-import {changeSegment} from "../../reducer/segmentsSlice.ts";
-import RoomDataForm from "./roomDataForm/roomDataForm.tsx";
+import {AppDispatch} from "../store/store.ts";
+import {changeSegment} from "../reducer/segmentsSlice.ts";
+import RoomDataForm from "../components/roomDataForm/roomDataForm.tsx";
+import {getFullName} from "../../util/getFullName.ts";
+import {Contact} from "../model/contact.ts";
 
 interface CreateRoomsProps {
     collapse: boolean;
@@ -17,13 +19,13 @@ interface CreateRoomsProps {
 }
 
 const contactDetails = [
-    {name: "Amodh", email: "amodh@gmail.com", bio: "Software", profile: ""},
-    {name: "Kavindu", email: "kavi@gmail.com", bio: "Software Dev", profile: ""},
-    {name: "Tharusha", email: "capa@gmail.com", bio: "Software Engineering", profile: ""},
-    {name: "Nishan", email: "nisha@gmail.com", bio: "Developer", profile: ""},
-    {name: "Eranga", email: "era@gmail.com", bio: "fullstack dev", profile: ""},
-    {name: "Saminda", email: "sami@gmail.com", bio: "Bekaray ", profile: ""},
-    {name: "Sandul", email: "sandul@gmail.com", bio: "Hichchi guide", profile: ""},
+    {firstName: "Amodh", lastName: "Nanditha", email: "amodh@gmail.com", bio: "Software", profile: ""},
+    {firstName: "Kavindu", lastName: "Gayantha", email: "kavi@gmail.com", bio: "Software Dev", profile: ""},
+    {firstName: "Tharusha", lastName: "Nethmina", email: "capa@gmail.com", bio: "Software Engineering", profile: ""},
+    {firstName: "Nishan", lastName: "Tharuka", email: "nisha@gmail.com", bio: "Developer", profile: ""},
+    {firstName: "Eranga", lastName: "Hasakalum", email: "era@gmail.com", bio: "fullstack dev", profile: ""},
+    {firstName: "Saminda", lastName: "Fernando", email: "sami@gmail.com", bio: "Bekaray ", profile: ""},
+    {firstName: "Sandul", lastName: "Rusara", email: "sandul@gmail.com", bio: "Hichchi guide", profile: ""},
 ];
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
@@ -31,6 +33,8 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse }) => {
     const [selectedValue, setSelectedValue] = useState("New Contact");
     const dispatch = useDispatch<AppDispatch>();
+    const [roomName, setRoomName] = useState("");
+    const [memberList, setMemberList] = useState<Contact[]>([]);
 
     useEffect(() => {
         if (selectedValue === "New Rooms") {
@@ -86,13 +90,27 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
         setSelectedValue(value);
     }
 
-    const handleContactCard = (contact: {name: string, bio: string, profile: string}) => {
-        console.log("Clicked on contact:", contact);
+    const handleContactCard = (contact: Contact) => {
+        setMemberList((prevMembers: Contact[]) => {
+            if (!prevMembers.some((member) => member.email === contact.email)) {
+                return [...prevMembers, contact];
+            } else {
+                return prevMembers.filter(member => member.email !== contact.email);
+            }
+        });
     }
 
     const handleModalCancelBtn = () => {}
 
-    const handleModalSaveBtn = () => {}
+    const handleAddTOContactModalSaveBtn = () => {
+
+    }
+
+    const handleCreateRoomBtn = () => {
+        console.log("trigger button")
+        console.log(memberList);
+        console.log(roomName);
+    }
 
     return(
         <>
@@ -135,7 +153,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                     </Button>
                                 </Dialog.Close>
                                 <Dialog.Close>
-                                    <Button className="bg-blue-500 bg-opacity-70 hover:bg-blue-300 text-amber-50" onClick={handleModalSaveBtn}>Save</Button>
+                                    <Button className="bg-blue-500 bg-opacity-70 hover:bg-blue-300 text-amber-50" onClick={handleAddTOContactModalSaveBtn}>Save</Button>
                                 </Dialog.Close>
                             </Flex>
                         </Dialog.Content>
@@ -178,8 +196,22 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                 </ImgCrop>
                             </Flex>
                             { !collapse &&
-                                <RoomDataForm collapse={collapse} selectedValue={selectedValue} sizeTextField={"250px"}/>
+                                <RoomDataForm
+                                    collapse={collapse}
+                                    setRoomName={setRoomName}
+                                    setMembers={setMemberList}
+                                    selectedValue={selectedValue}
+                                    sizeTextField={"250px"}/>
                             }
+                            <Flex justify="end" style={{ width: "290px", marginRight: "14px", display: collapse ? "none" : "block" }}>
+                                <Button
+                                    type="text"
+                                    className="text-amber-50 bg-blue-500 hover:!text-white hover:!bg-blue-400 mt-2 w-full"
+                                    onClick={handleCreateRoomBtn}
+                                >
+                                    Create Room
+                                </Button>
+                            </Flex>
                         </>
                     ) : (
                             <div className="w-full pr-4" style={{
@@ -192,12 +224,14 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                             }}
                             >
                                 {contactDetails.map((contact, index) => {
+                                    const fullName = getFullName(contact.firstName, contact.lastName);
+
                                     return (
                                         <ContactCard
                                             key={index}
                                             collapse={collapse}
                                             selectedSegment={selectedValue}
-                                            name={contact.name}
+                                            name={fullName}
                                             bio={contact.bio}
                                             profile={contact.profile}
                                             onClick={() => handleContactCard(contact)}
