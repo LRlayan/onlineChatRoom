@@ -23,6 +23,7 @@ const ContactCard: React.FC<ContactProps> = ({collapse, selectedSegment, name, b
                 onClick();
             } else {
                 setCount(0);
+                onClick();
             }
         }
     }
