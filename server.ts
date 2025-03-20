@@ -5,6 +5,8 @@ import cors from 'cors';
 const { Server } = require("socket.io");
 import { createServer } from 'http';
 import chatRoutes from "./routes/chat-routes";
+import authRoutes from "./routes/auth-routes";
+import {authenticateToken} from "./middleware/authenticate";
 
 dotenv.config();
 const app = express();
@@ -42,6 +44,8 @@ io.on("connection", (socket: any) => {
     });
 });
 
+app.use('/api/v1/auth', authRoutes);
+
 mongoose.connect("mongodb://localhost:27017/chatRoom")
     .then(() => {
         console.log("Connected to MongoDB");
@@ -50,7 +54,7 @@ mongoose.connect("mongodb://localhost:27017/chatRoom")
         console.error("Failed to connect to MongoDB", err);
 });
 
-app.use('/api/v1/chat', chatRoutes);
+app.use('/api/v1/chat',authenticateToken, chatRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server start 5000"))
