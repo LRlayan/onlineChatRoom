@@ -6,7 +6,7 @@ export async function saveUserService(user: UserModel) {
         const users = new UserModel(user.username, user.email, user.password);
         return await saveUserRepository(users);
     } catch (e) {
-        throw e;
+        console.log(" service : ", e);
     }
 }
 
