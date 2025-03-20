@@ -6,7 +6,7 @@ import {saveUserService, verifyUserCredentialsService} from "../service/user-ser
 
 dotenv.config();
 
-const router =express.Router();
+const router = express.Router();
 
 router.post("/login", async (req: express.Request, res: express.Response) => {
     const username = req.body.username;
@@ -17,7 +17,7 @@ router.post("/login", async (req: express.Request, res: express.Response) => {
         const isVerified = await verifyUserCredentialsService(username,password);
 
         if (isVerified) {
-            const token = jwt.sign({ username }, process.env.SECRET_KEY as Secret, {expiresIn: "10d"});
+            const token = jwt.sign({ username }, process.env.SECRET_KEY as Secret, {expiresIn: "1h"});
             const refreshToken = jwt.sign({ username }, process.env.REFRESH_TOKEN as Secret, {expiresIn: "10d"});
             res.json({ accessToken : token, refreshToken: refreshToken });
         } else {
@@ -29,18 +29,16 @@ router.post("/login", async (req: express.Request, res: express.Response) => {
     }
 });
 
-router.post("/register", async (req: express.Request, res: express.Response) => {
-    const username = req.body.username;
-    const email = req.body.email;
-    const password = req.body.password;
+router.post("/register", async (req, res) => {
+    const { username, email, password } = req.body;
 
     const user = new UserModel(username, email, password);
-    try {
+    try{
         const registration = await saveUserService(user);
         res.status(201).json(registration);
-    } catch (e) {
-        console.log(e);
-        res.status(401).json(e);
+    }catch(err){
+        console.log(err);
+        res.status(401).json(err);
     }
 });
 
