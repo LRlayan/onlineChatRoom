@@ -5,13 +5,15 @@ export interface IContacts {
     lastName: string;
     email: string;
     rooms: mongoose.Types.ObjectId[];
+    users: mongoose.Types.ObjectId[];
 }
 
 const contacts = new mongoose.Schema<IContacts>({
     firstName: String,
     lastName: String,
-    email: String,
+    email: { type: String, required: true, unique: true },
     rooms: [{type: mongoose.Types.ObjectId, ref: "Rooms"}],
+    users: [{type: mongoose.Types.ObjectId, ref: "User"}]
 });
 
 const Contacts = mongoose.model<any>("Contacts", contacts);
