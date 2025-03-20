@@ -1,11 +1,11 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose from "mongoose";
 
-const messages = new Schema({
-    sender: String,
-    room: String,
-    message: String,
-    timestamp: { type: Date, default: Date.now() },
+const MessageSchema = new mongoose.Schema({
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    receiver: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    message: { type: String },
+    imageUrl: { type: String }, // Image URL field
+    timestamp: { type: Date, default: Date.now }
 });
 
-const MessagesSchema = mongoose.model<any>("Messages", messages);
-export default MessagesSchema;
+export default mongoose.model("Message", MessageSchema);
