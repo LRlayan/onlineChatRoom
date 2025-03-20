@@ -8,20 +8,20 @@ export async function saveUserRepository(user: { username: string; email: string
         const newUser = new User({
             username: user.username,
             email: user.email,
-            password: user.password
+            password: hashedPassword
         });
 
         await newUser.save();
         return newUser;
     } catch (e) {
         console.error("Error saving user:", e);
-        throw e;
     }
 }
 
 export async function verifyUserCredentials( username: string, password: string ) {
     try {
         const user = await User.findOne({ username });
+
         if (!user) {
             return false;
         }
@@ -31,9 +31,10 @@ export async function verifyUserCredentials( username: string, password: string 
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
+        console.log(passwordMatch, " match ")
         return passwordMatch;
-    } catch (e) {
-        console.error("Error verifying user credentials:", e);
-        throw e;
+    } catch (error) {
+        console.error("Error verifying user credentials:", error);
+        throw error;
     }
 }
