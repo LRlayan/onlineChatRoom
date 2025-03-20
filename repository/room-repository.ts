@@ -1,5 +1,4 @@
 import Rooms from "../schema/room";
-import Room from "../schema/room";
 
 interface Rooms {
     name: string;
