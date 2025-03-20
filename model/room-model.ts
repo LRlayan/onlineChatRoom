@@ -13,7 +13,7 @@ export class RoomModel {
         this._members = members;
     }
 
-    get roomCode(): string {
+    get roomCode(): string | null {
         return this._roomCode;
     }
 
