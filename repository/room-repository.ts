@@ -1,4 +1,5 @@
 import Rooms from "../schema/room";
+import Room from "../schema/room";
 
 interface Rooms {
     name: string;
@@ -18,6 +19,15 @@ export async function saveRoomRepository(roomData: Rooms) {
         }
     } catch (e) {
         console.error("Failed to create room:", e);
+        throw e;
+    }
+}
+
+export async function getAllRooms() {
+    try {
+        return await Rooms.find().populate("members");
+    } catch (e) {
+        console.error("Failed to get rooms data:", e);
         throw e;
     }
 }
