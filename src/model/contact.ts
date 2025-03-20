@@ -1,9 +1,9 @@
 export class Contact {
-    firstName: string;
-    lastName: string;
-    email: string;
-    bio: string;
-    profile: string;
+    public firstName: string;
+    public lastName: string;
+    public email: string;
+    public bio: string;
+    public profile: string;
 
     constructor(firstName: string, lastName: string, email: string, bio: string, profile: string) {
         this.firstName = firstName;
