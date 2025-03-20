@@ -1,10 +1,12 @@
-import React, {useState} from "react";
-import {Text, TextField} from "@radix-ui/themes";
+import React, {useEffect, useState} from "react";
 import { Input, Button, Checkbox, Form, FormProps } from "antd";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import AnchorTag from "../components/anchor-tag/AnchorTag.tsx";
 import {AppDispatch} from "../store/store.ts";
 import {Heading1} from "../components/heading/Heading.tsx";
+import {useNavigate} from "react-router";
+import {User} from "../model/user.ts";
+import {login, register, UserRootState} from "../reducer/userSlice.ts";
 
 type FieldType = {
     username?: string;
@@ -15,7 +17,9 @@ type FieldType = {
 
 const SignInSignUp: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     const [isSignUp, setIsSignUp] = useState(false);
+    const isAuthenticated = useSelector((state: UserRootState) => state.user.isAuthenticated);
     const [registerUsername, setRegisterUsername] = useState("");
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
@@ -23,18 +27,29 @@ const SignInSignUp: React.FC = () => {
     const [loginUsername, setLoginUsername] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
 
+    useEffect(() => {
+        if (isSignUp) {
+            if (isAuthenticated) {
+                navigate("/");
+            }
+        }
+        if (isAuthenticated) {
+            navigate("/dashboard");
+        }
+    },[isAuthenticated])
+
     const handleUser = () => {
         if (isSignUp) {
-            // const newUser = new User(registerUsername,registerEmail,registerPassword);
-            // return dispatch(register(newUser));
+            const newUser = new User(registerUsername,registerEmail,registerPassword);
+            return dispatch(register(newUser));
         }
-        // const user: User = { username: loginUsername, email: "", password: loginPassword };
-        // dispatch(login(user));
+        const userObj = new User(loginUsername, "", loginPassword);
+        dispatch(login(userObj));
     };
-
 
     const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
         console.log("Success:", values);
+        navigate("/dashboard");
     };
 
     const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
