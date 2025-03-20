@@ -12,6 +12,7 @@ const server = createServer(app);
 
 app.use(express.json());
 app.use(cors());
+app.use('/uploads', express.static('uploads'));
 
 //socket.io setup
 const io = new Server(server, {
