@@ -46,11 +46,11 @@ router.post("/register", async (req: express.Request, res: express.Response) => 
 
 router.post("/refresh-token", async (req:express.Request, res: express.Response) => {
     const authHeader = req.headers.authorization;
-    const refreshToken = authHeader.split(" ")[0];
+    const refreshToken = authHeader?.split(" ")[1];
 
     if (!refreshToken)res.status(401).json("No token Provided");
     try {
-        const payload = jwt.verify(refreshToken as string, process.env.REFRESH_TOKEN as Secret) as {username: string, iat: string};
+        const payload = jwt.verify(refreshToken as string, process.env.REFRESH_TOKEN as Secret) as {username: string, iat: number};
         const token = jwt.sign({ username: payload.username }, process.env.SECRET_KEY as Secret, {expiresIn: "10d"});
         res.json({accessToken: token});
     } catch (e) {
