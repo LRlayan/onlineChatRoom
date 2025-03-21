@@ -17,6 +17,7 @@ import {changeSegment, SegmentsRootState} from "../reducer/segmentsSlice.ts";
 import {AppDispatch} from "../store/store.ts";
 import RoomDataForm from "./roomDataForm/roomDataForm.tsx";
 import {Contact} from "../model/contact.ts";
+import {saveRooms} from "../reducer/roomSlice.ts";
 
 const { Header, Sider, Content } = Layout;
 
@@ -44,6 +45,7 @@ const RootLayout: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [roomName, setRoomName] = useState("");
     const [memberList, setMemberList] = useState<Contact[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const handleCardClick = (key: number) => {
         setSelectedCard(prev => prev === key ? null : key);
@@ -77,9 +79,18 @@ const RootLayout: React.FC = () => {
     }
 
     const handleModalSaveBtn = () => {
+        const createdAtTimestamp = Date.now();
+        const formData = new FormData();
         dispatch(changeSegment({ segment: "New Contact", collapse: true}));
-        console.log(memberList);
-        console.log(roomName);
+
+        formData.append("roomCode", "");
+        formData.append("name", roomName);
+        formData.append("createAt", createdAtTimestamp.toString());
+        if (selectedFile) {
+            formData.append("image", selectedFile);
+        }
+        formData.append("members", JSON.stringify(memberList));
+        dispatch(saveRooms(formData));
     }
 
     return (
@@ -146,7 +157,11 @@ const RootLayout: React.FC = () => {
                     ) : !showCreateRooms && showProfile ? (
                         <ProfileView collapse={collapsed} setShowProfile={setShowProfile} />
                     ) : !showProfile && showCreateRooms ? (
-                        <CreateChats collapse={collapsed} setShowCreateRooms={setCreateRooms}/>
+                        <CreateChats
+                            collapse={collapsed}
+                            setShowCreateRooms={setCreateRooms}
+                            setRootSelectedFile={setSelectedFile}
+                        />
                     ): ""}
                 </Sider>
                 <Layout style={{ background: "black" }}>
