@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import User from "../schema/user";
+import User, {IUser} from "../schema/user";
 
 export async function saveUserRepository(user: { username: string; email: string; password: string }) {
     try {
@@ -16,6 +16,10 @@ export async function saveUserRepository(user: { username: string; email: string
     } catch (e) {
         console.error("Error saving user:", e);
     }
+}
+
+export async function findUserByEmail(email: string): Promise<IUser | null> {
+    return await User.findOne({ email }).populate("contacts").populate("rooms").exec();
 }
 
 export async function verifyUserCredentials( username: string, password: string ) {
