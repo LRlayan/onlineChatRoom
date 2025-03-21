@@ -19,6 +19,10 @@ contactRoutes.post("/saveContact", async (req: express.Request, res: express.Res
         contact.lastName = lastName;
         contact.email = email;
         const response = await saveContactService(contact);
+        if (response === false) {
+            res.json(`${firstName+ " " + lastName} is not register our system`);
+            return;
+        }
         res.status(201).json(response);
     } catch (e) {
         console.log("Failed to save contact!",e);
