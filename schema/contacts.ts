@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface IContacts {
+    code: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -9,6 +10,7 @@ export interface IContacts {
 }
 
 const contacts = new mongoose.Schema<IContacts>({
+    code: {type: String, unique: true},
     firstName: String,
     lastName: String,
     email: { type: String, required: true, unique: true },
