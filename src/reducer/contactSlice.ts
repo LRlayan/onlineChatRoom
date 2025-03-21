@@ -20,9 +20,7 @@ export const saveContact = createAsyncThunk(
     "contact/saveContact",
     async (contact: Contact) => {
         try {
-            console.log("thunk" ,contact)
             const response = await api.post("contact/saveContact", contact);
-            console.log("data res : ", response.data)
             return response.data;
         } catch (e) {
             throw e;
