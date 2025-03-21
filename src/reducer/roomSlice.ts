@@ -11,6 +11,7 @@ export type RoomRootState = {
         rooms: Array<{
             name: string;
             createAt: Date;
+            image: File | string | null;
             members: [];
         }>;
     };
@@ -27,6 +28,7 @@ export const saveRooms = createAsyncThunk(
             });
             return response.data;
         } catch (e) {
+            console.log(e);
             throw e;
         }
     }
