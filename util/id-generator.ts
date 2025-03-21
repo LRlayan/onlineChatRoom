@@ -1,4 +1,5 @@
 import {getAllRooms} from "../repository/room-repository";
+import {getAllContacts} from "../repository/contact-repository";
 
 class IdGenerator {
 
@@ -12,6 +13,14 @@ class IdGenerator {
                     return await this.codesIncrement(roomCodes,"ROOM");
                 }
                 return "ROOM-1";
+            case "CONTACT-":
+                const getAllContact = await getAllContacts();
+                const contactCodes = getAllContact.map((contact) => contact.code);
+
+                if (contactCodes.length > 0) {
+                    return await this.codesIncrement(contactCodes,"CONTACT");
+                }
+                return "CONTACT-1";
             default:
                 return null;
         }
