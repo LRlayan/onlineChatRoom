@@ -22,6 +22,14 @@ export async function saveContactRepository(contactData: Contacts) {
         }
     } catch (e) {
         console.error("Failed to add to contact:", e);
+    }
+}
+
+export async function getAllContacts() {
+    try {
+        return await Contacts.find().populate("rooms").populate("users").exec();
+    } catch (e) {
+        console.error("Failed to get rooms data:", e);
         throw e;
     }
 }
