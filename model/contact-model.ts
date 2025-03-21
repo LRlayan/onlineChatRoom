@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 export class ContactModel {
-    private _code: string;
+    private _code: string | null;
     private _firstName: string;
     private _lastName: string;
     private _email: string;
     private _rooms: string[];
     private _users: string[];
 
-    constructor(code: string, firstName: string, lastName: string, email: string, rooms: string[], users: string[]) {
+    constructor(code: string | null, firstName: string, lastName: string, email: string, rooms: string[], users: string[]) {
         this._code = code;
         this._firstName = firstName;
         this._lastName = lastName;
@@ -17,11 +17,11 @@ export class ContactModel {
         this._users = users;
     }
 
-    get code(): string {
+    get code(): string | null{
         return this._code;
     }
 
-    set code(value: string) {
+    set code(value: string | null) {
         this._code = value;
     }
 
