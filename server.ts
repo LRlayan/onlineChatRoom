@@ -5,6 +5,7 @@ import cors from 'cors';
 import { Server } from "socket.io";
 import { createServer } from 'http';
 import chatRoutes from "./routes/chat-routes";
+import contactRoutes from "./routes/contact-routes";
 import authRoutes from "./routes/auth-routes";
 import {authenticateToken} from "./middleware/authenticate";
 
@@ -63,6 +64,7 @@ mongoose.connect("mongodb://localhost:27017/chatRoom")
 });
 
 app.use('/api/v1/chat',authenticateToken, chatRoutes);
+app.use('/api/v1/contact',authenticateToken, contactRoutes);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log("Server start 3000"));
