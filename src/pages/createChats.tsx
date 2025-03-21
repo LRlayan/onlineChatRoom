@@ -12,6 +12,8 @@ import {changeSegment} from "../reducer/segmentsSlice.ts";
 import RoomDataForm from "../components/roomDataForm/roomDataForm.tsx";
 import {getFullName} from "../../util/getFullName.ts";
 import {Contact} from "../model/contact.ts";
+import {saveRooms} from "../reducer/roomSlice.ts";
+import {saveContact} from "../reducer/contactSlice.ts";
 
 interface CreateRoomsProps {
     collapse: boolean;
@@ -28,13 +30,18 @@ const contactDetails = [
     {firstName: "Sandul", lastName: "Rusara", email: "sandul@gmail.com", bio: "Hichchi guide", profile: ""},
 ];
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+export type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse }) => {
     const [selectedValue, setSelectedValue] = useState("New Contact");
     const dispatch = useDispatch<AppDispatch>();
     const [roomName, setRoomName] = useState("");
+    const [createAt, setCreateAt] = useState<number | undefined>();
     const [memberList, setMemberList] = useState<Contact[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
 
     useEffect(() => {
         if (selectedValue === "New Rooms") {
@@ -54,7 +61,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
             uid: '-1',
             name: 'image.png',
             status: 'done',
-            url: '',
+            url: '/user-cicrle-svgrepo-com.svg',
         },
     ]);
 
@@ -78,12 +85,11 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
     };
 
     const handleBeforeUpload = (file: any) => {
-        console.log(file);
-        return true;
+        setSelectedFile(file);
     };
 
     const handleAddContact = () => {
-        return true;
+
     }
 
     const handleSegmentChange = (value: string) => {
@@ -103,14 +109,26 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
     const handleModalCancelBtn = () => {}
 
     const handleAddTOContactModalSaveBtn = () => {
-
+        const newContact = new Contact(firstName, lastName, email);
+        dispatch(saveContact(newContact));
     }
 
     const handleCreateRoomBtn = () => {
-        console.log("trigger button")
-        console.log(memberList);
-        console.log(roomName);
-    }
+        const createdAtTimestamp = Date.now();
+        setCreateAt(createdAtTimestamp);
+
+        // const selectedFile = fileList[0]?.originFileObj as FileType;
+
+        const formData = new FormData();
+        formData.append("name", roomName);
+        formData.append("createAt", (createAt ?? Date.now()).toString());
+        if (selectedFile) {
+            formData.append("image", selectedFile);
+        }
+        formData.append("members", JSON.stringify(memberList));
+        console.log(" member list >>> ",memberList)
+        dispatch(saveRooms(formData));
+    };
 
     return(
         <>
@@ -137,11 +155,30 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                                 <Flex align="center" className="items-center pr-0 pl-0 pt-3 rounded-lg">
                                     <Flex direction="column" gap="1" maxWidth="300px">
                                         <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>First Name</Text>
-                                        <TextField.Root size="2" variant="soft" placeholder="room name" style={{ width: "360px", }} />
+                                        <TextField.Root
+                                            size="2"
+                                            variant="soft"
+                                            placeholder="First Name"
+                                            style={{ width: "360px" }}
+                                            value={firstName}
+                                            onChange={(e) => setFirstName((e.target as HTMLInputElement).value)}
+                                        />
                                         <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>Last Name</Text>
-                                        <TextField.Root size="2" variant="soft" placeholder="room name" style={{ width: "360px" }} />
+                                        <TextField.Root
+                                            size="2" variant="soft"
+                                            placeholder="room name"
+                                            style={{ width: "360px" }}
+                                            value={lastName}
+                                            onChange={(e) => setLastName((e.target as HTMLInputElement).value)}
+                                        />
                                         <Text className="text-gray-400" style={{fontSize: "12px", font: "revert", textAlign: "start"}}>Email</Text>
-                                        <TextField.Root size="2" variant="soft" placeholder="room name" style={{ width: "360px" }} />
+                                        <TextField.Root
+                                            size="2" variant="soft"
+                                            placeholder="room name"
+                                            style={{ width: "360px" }}
+                                            value={email}
+                                            onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
+                                        />
                                     </Flex>
                                 </Flex>
                             </Flex>
