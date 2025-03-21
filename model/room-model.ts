@@ -1,15 +1,15 @@
-import mongoose from "mongoose";
-
 export class RoomModel {
     private _roomCode: string | null;
     private _name: string;
     private _createAt: Date;
-    private _members: mongoose.Types.ObjectId[];
+    private _image: string | null;
+    private _members: string[];
 
-    constructor(roomCode: string | null, name: string, createAt: Date, members: mongoose.Types.ObjectId[]) {
+    constructor(roomCode: string | null, name: string, createAt: Date, image: string | null, members: string[]) {
         this._roomCode = roomCode;
         this._name = name;
         this._createAt = createAt;
+        this._image = image;
         this._members = members;
     }
 
@@ -37,11 +37,19 @@ export class RoomModel {
         this._createAt = value;
     }
 
-    get members(): mongoose.Types.ObjectId[] {
+    get image(): string | null {
+        return this._image;
+    }
+
+    set image(value: string | null) {
+        this._image = value;
+    }
+
+    get members(): string[] {
         return this._members;
     }
 
-    set members(value: mongoose.Types.ObjectId[]) {
+    set members(value: string[]) {
         this._members = value;
     }
 }
