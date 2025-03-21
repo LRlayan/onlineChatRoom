@@ -20,7 +20,7 @@ export const saveRooms = createAsyncThunk(
     "room/saveRooms",
     async ( room: FormData ) => {
         try {
-            const response = await api.post("room/saveRooms", room, {
+            const response = await api.post("chat/saveRooms", room, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
@@ -42,6 +42,12 @@ const RoomSlice = createSlice({
                 if (action.payload) {
                     state.rooms = [...state.rooms, action.payload];
                 }
+            })
+            .addCase(saveRooms.pending, () => {
+                console.log("Pending save Rooms");
+            })
+            .addCase(saveRooms.rejected, () => {
+                console.log("save rooms rejected request");
             })
     }
 });
