@@ -16,8 +16,9 @@ import {saveRooms} from "../reducer/roomSlice.ts";
 import {saveContact} from "../reducer/contactSlice.ts";
 
 interface CreateRoomsProps {
-    collapse: boolean;
     setShowCreateRooms: React.Dispatch<React.SetStateAction<boolean>>;
+    collapse: boolean;
+    setRootSelectedFile: React.Dispatch<React.SetStateAction<File | null>>; // Receive function as prop
 }
 
 const contactDetails = [
@@ -32,11 +33,10 @@ const contactDetails = [
 
 export type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse }) => {
+const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse, setRootSelectedFile }) => {
     const [selectedValue, setSelectedValue] = useState("New Contact");
     const dispatch = useDispatch<AppDispatch>();
     const [roomName, setRoomName] = useState("");
-    const [createAt, setCreateAt] = useState<number | undefined>();
     const [memberList, setMemberList] = useState<Contact[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [firstName, setFirstName] = useState("");
@@ -86,6 +86,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
 
     const handleBeforeUpload = (file: any) => {
         setSelectedFile(file);
+        setRootSelectedFile(file);
     };
 
     const handleAddContact = () => {
@@ -115,18 +116,15 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
 
     const handleCreateRoomBtn = () => {
         const createdAtTimestamp = Date.now();
-        setCreateAt(createdAtTimestamp);
-
-        // const selectedFile = fileList[0]?.originFileObj as FileType;
 
         const formData = new FormData();
+        formData.append("roomCode", "");
         formData.append("name", roomName);
-        formData.append("createAt", (createAt ?? Date.now()).toString());
+        formData.append("createAt", createdAtTimestamp.toString());
         if (selectedFile) {
             formData.append("image", selectedFile);
         }
         formData.append("members", JSON.stringify(memberList));
-        console.log(" member list >>> ",memberList)
         dispatch(saveRooms(formData));
     };
 
@@ -220,13 +218,17 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse 
                             <Flex align="center" className="mr-4 mb-3">
                                 <ImgCrop rotationSlider>
                                     <Upload
-                                        action="http://localhost:3000/upload-image"
+                                        name="image"
+                                        action={`http://localhost:3000/api/v1/chat/saveRooms`}
                                         listType="picture-circle"
                                         fileList={fileList}
                                         onChange={onChange}
                                         onPreview={onPreview}
                                         beforeUpload={handleBeforeUpload}
                                         className="text-blue-500"
+                                        headers={{
+                                            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
+                                        }}
                                     >
                                         {fileList.length < 1 && '+ Upload'}
                                     </Upload>
