@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { Server } from "socket.io";
 import { createServer } from 'http';
-import chatRoutes from "./routes/chat-routes";
+import roomRoutes from "./routes/room-routes";
 import contactRoutes from "./routes/contact-routes";
 import authRoutes from "./routes/auth-routes";
 import {authenticateToken} from "./middleware/authenticate";
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors({
     origin: "http://localhost:5173",
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', "x-requested-with"],
     credentials: true,
 }));
 
@@ -27,7 +27,7 @@ const io = new Server(server, {
     cors: {
         origin: "http://localhost:5173",
         methods: ['GET','POST','PUT','PATCH','DELETE'],
-        allowedHeaders: ['Content-Type','Authorization'],
+        allowedHeaders: ['Content-Type','Authorization', "x-requested-with"],
         credentials: true,
     }
 });
@@ -63,7 +63,7 @@ mongoose.connect("mongodb://localhost:27017/chatRoom")
         console.error("Failed to connect to MongoDB", err);
 });
 
-app.use('/api/v1/chat',authenticateToken, chatRoutes);
+app.use('/api/v1/chat',authenticateToken, roomRoutes);
 app.use('/api/v1/contact',authenticateToken, contactRoutes);
 
 const PORT = process.env.PORT || 3000;
