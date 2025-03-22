@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import User, {IUser} from "../schema/user";
+import mongoose from "mongoose";
 
 export async function saveUserRepository(user: { username: string; email: string; password: string }) {
     try {
@@ -15,6 +16,15 @@ export async function saveUserRepository(user: { username: string; email: string
         return newUser;
     } catch (e) {
         console.error("Error saving user:", e);
+    }
+}
+
+export async function getSelectedUsers(_ids: mongoose.Types.ObjectId[]) {
+    try {
+        return await User.find({ _id: { $in: _ids }});
+    } catch (e) {
+        console.error("Error fetching selected users:", e);
+        throw new Error("Failed to fetch selected users. Please try again.");
     }
 }
 
