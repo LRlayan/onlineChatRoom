@@ -17,7 +17,7 @@ router.post("/login", async (req: express.Request, res: express.Response) => {
         const isVerified = await verifyUserCredentialsService(username,password);
 
         if (isVerified) {
-            const token = jwt.sign({ username }, process.env.SECRET_KEY as Secret, {expiresIn: "1h"});
+            const token = jwt.sign({ username }, process.env.SECRET_KEY as Secret, {expiresIn: "1d"});
             const refreshToken = jwt.sign({ username }, process.env.REFRESH_TOKEN as Secret, {expiresIn: "10d"});
             res.json({ accessToken : token, refreshToken: refreshToken });
         } else {
