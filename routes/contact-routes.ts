@@ -2,10 +2,12 @@ import express from "express";
 import {ContactModel} from "../model/contact-model";
 import {saveContactService} from "../service/contact-service";
 import IdGenerator from "../util/id-generator";
+import { Request, Response } from "express";
+import {AuthRequest} from "../middleware/authenticate";
 
 const contactRoutes = express.Router();
 
-contactRoutes.post("/saveContact", async (req: express.Request, res: express.Response)=> {
+contactRoutes.post("/saveContact", async (req: AuthRequest, res: Response)=> {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
@@ -18,7 +20,8 @@ contactRoutes.post("/saveContact", async (req: express.Request, res: express.Res
         contact.firstName = firstName;
         contact.lastName = lastName;
         contact.email = email;
-        const response = await saveContactService(contact);
+        const loggedInUser = req.user;
+        const response = await saveContactService(loggedInUser, contact);
         if (response === false) {
             res.json(`${firstName+ " " + lastName} is not register our system`);
             return;
