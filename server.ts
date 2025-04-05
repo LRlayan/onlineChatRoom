@@ -1,70 +1,97 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors';
+import cluster from "cluster";
+import os from "os";
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
 import { Server } from "socket.io";
-import { createServer } from 'http';
-import roomRoutes from "./routes/room-routes";
+import { createServer } from "http";
 import contactRoutes from "./routes/contact-routes";
 import authRoutes from "./routes/auth-routes";
-import {authenticateToken} from "./middleware/authenticate";
+import { authenticateToken } from "./middleware/authenticate";
+import roomRoutes, {createRoomRoutes} from "./routes/room-routes";
 
 dotenv.config();
-const app = express();
-const server = createServer(app);
+const numCPUs = os.cpus().length;
 
-app.use(express.json());
+// Primary Process: Fork Worker Processes
+if (cluster.isPrimary) {
+    console.log(`Primary process ${process.pid} is running`);
 
-app.use(cors({
-    origin: "http://localhost:5173",
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', "x-requested-with"],
-    credentials: true,
-}));
-
-//socket.io setup
-const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:5173",
-        methods: ['GET','POST','PUT','PATCH','DELETE'],
-        allowedHeaders: ['Content-Type','Authorization', "x-requested-with"],
-        credentials: true,
+    // Fork worker processes for each CPU core
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
     }
-});
 
-io.on("connection", (socket: any) => {
-    console.log(`User connected: ${socket.id}`);
-
-    //join a room
-    socket.on("joinRoom", (room: any) => {
-        socket.join(room);
-        console.log(`User ${socket.id} joined room ${room}`);
+    // Restart worker if it crashes
+    cluster.on("exit", (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} died. Spawning a new worker...`);
+        cluster.fork();
     });
 
-    //send message
-    socket.on("sendMessage", (data: any) => {
-        io.to(data.room).emit("receiveMessage", data);
+} else {
+    // Worker Process
+    const app = express();
+    const server = createServer(app);
+
+    app.use(express.json());
+
+    app.use(
+        cors({
+            origin: "http://localhost:5173",
+            methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+            allowedHeaders: ["Content-Type", "Authorization", "x-requested-with"],
+            credentials: true,
+        })
+    );
+
+    // MongoDB Connection
+    mongoose
+        .connect("mongodb://localhost:27017/chatRoom")
+        .then(() => console.log(`Worker ${process.pid} connected to MongoDB`))
+        .catch((err) => console.error("MongoDB connection error", err));
+
+    // WebSocket Server Setup
+    const io = new Server(server, {
+        cors: {
+            origin: "http://localhost:5173",
+            methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+            allowedHeaders: ["Content-Type", "Authorization", "x-requested-with"],
+            credentials: true,
+        },
     });
 
-    //disconnect
-    socket.on("disconnect", () => {
-        console.log(`User Disconnected: ${socket.id}`);
+    io.on("connection", (socket) => {
+        console.log(`User connected: ${socket.id} on Worker ${process.pid}`);
+
+        socket.on("joinRoom", (room) => {
+            socket.join(room);
+            console.log(`User ${socket.id} joined room ${room}`);
+        });
+
+        socket.on("sendMessage", (data) => {
+            io.to(data.room).emit("receiveMessage", data);
+            console.log("server message data : ", data)
+        });
+
+        socket.on("disconnect", () => {
+            console.log(`User Disconnected: ${socket.id}`);
+        });
     });
-});
 
-app.use('/uploads', express.static('uploads'));
-app.use('/api/v1/auth', authRoutes);
+    app.use("/api/v1/chat", authenticateToken, roomRoutes);
 
-mongoose.connect("mongodb://localhost:27017/chatRoom")
-    .then(() => {
-        console.log("Connected to MongoDB");
-    })
-    .catch(err => {
-        console.error("Failed to connect to MongoDB", err);
-});
+    const socketRoomRoutes  = createRoomRoutes(io);
+    app.use("/api/v1/chat", authenticateToken, socketRoomRoutes);
 
-app.use('/api/v1/chat',authenticateToken, roomRoutes);
-app.use('/api/v1/contact',authenticateToken, contactRoutes);
+    // Static Uploads Directory
+    app.use("/uploads", express.static("uploads"));
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log("Server start 3000"));
+    // Routes
+    app.use("/api/v1/auth", authRoutes);
+    app.use("/api/v1/contact", authenticateToken, contactRoutes);
+
+    // Start Worker Server
+    const PORT = process.env.PORT || 3000;
+    server.listen(PORT, () => console.log(`Worker ${process.pid} running on port ${PORT}`));
+}
