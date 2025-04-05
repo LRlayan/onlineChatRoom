@@ -38,7 +38,6 @@ contactRoutes.post("/saveContact", upload.single('image'), async (req: AuthReque
 
 contactRoutes.get("/getAllContact", async (req, res) => {
     try {
-        console.log("get all contacts ")
         const response = await getAllContactService();
         if (response) {
             if (response) {
