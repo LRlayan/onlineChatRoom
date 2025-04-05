@@ -8,6 +8,7 @@ const roomRoutes = express.Router();
 const imageUploader = new ImageUploader();
 const upload = imageUploader.uploader('room');
 
+
 //create room
 roomRoutes.post("/saveRooms", upload.single('image'),async (req, res) => {
     const { name, createAt, members } = req.body;
@@ -33,8 +34,31 @@ roomRoutes.post("/saveRooms", upload.single('image'),async (req, res) => {
     res.status(201).json(result);
 });
 
-roomRoutes.post("/getRoom", async (req, res) => {
+roomRoutes.get("/getRoom", async (req, res) => {
 
 });
+
+export const createRoomRoutes = (io: any) => {
+    const router = express.Router();
+    router.post("/sendMessages", async (req, res) => {
+        const { room, sender, message } = req.body;
+        console.log("call unaa")
+        if (!room || !message) {
+            res.status(400).json({ error: "Room and message are required" });
+        }
+
+        io.to(room).emit("receiveMessage", {
+            sender,
+            message,
+            room,
+            time: new Date().toISOString(),
+        });
+        console.log("room name : " ,room);
+        console.log("message sender : ", sender);
+        console.log("room message : " ,message);
+        res.status(200).json({ success: true, message: {message} });
+    })
+    return router;
+};
 
 export default roomRoutes;
