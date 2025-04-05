@@ -6,14 +6,14 @@ import ImgCrop from "antd-img-crop";
 import {PhoneOutlined, UsergroupAddOutlined, ContactsOutlined,} from '@ant-design/icons';
 import { Segmented } from 'antd';
 import ContactCard from "../components/contactCard/contactCard.tsx";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../store/store.ts";
 import {changeSegment} from "../reducer/segmentsSlice.ts";
 import RoomDataForm from "../components/roomDataForm/roomDataForm.tsx";
 import {getFullName} from "../../util/getFullName.ts";
 import {Contact} from "../model/contact.ts";
 import {saveRooms} from "../reducer/roomSlice.ts";
-import {saveContact} from "../reducer/contactSlice.ts";
+import {ContactRootState, getAllContact, saveContact} from "../reducer/contactSlice.ts";
 
 interface CreateRoomsProps {
     setShowCreateRooms: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,21 +21,12 @@ interface CreateRoomsProps {
     setRootSelectedFile: React.Dispatch<React.SetStateAction<File | null>>; // Receive function as prop
 }
 
-const contactDetails = [
-    {firstName: "Amodh", lastName: "Nanditha", email: "amodh@gmail.com", bio: "Software", profile: ""},
-    {firstName: "Kavindu", lastName: "Gayantha", email: "kavi@gmail.com", bio: "Software Dev", profile: ""},
-    {firstName: "Tharusha", lastName: "Nethmina", email: "capa@gmail.com", bio: "Software Engineering", profile: ""},
-    {firstName: "Nishan", lastName: "Tharuka", email: "nisha@gmail.com", bio: "Developer", profile: ""},
-    {firstName: "Eranga", lastName: "Hasakalum", email: "era@gmail.com", bio: "fullstack dev", profile: ""},
-    {firstName: "Saminda", lastName: "Fernando", email: "sami@gmail.com", bio: "Bekaray ", profile: ""},
-    {firstName: "Sandul", lastName: "Rusara", email: "sandul@gmail.com", bio: "Hichchi guide", profile: ""},
-];
-
 export type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse, setRootSelectedFile }) => {
     const [selectedValue, setSelectedValue] = useState("New Contact");
     const dispatch = useDispatch<AppDispatch>();
+    const contacts = useSelector((state: ContactRootState) => state.contact.contacts) || [];
     const [roomName, setRoomName] = useState("");
     const [memberList, setMemberList] = useState<Contact[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -50,6 +41,10 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse,
             dispatch(changeSegment({ segment: "New Contact", collapse: false }));
         }
     }, [selectedValue]);
+
+    useEffect(() => {
+        dispatch(getAllContact());
+    }, [dispatch]);
 
     const handleArrowBtn = () => {
         setShowCreateRooms(false);
@@ -110,7 +105,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse,
     const handleModalCancelBtn = () => {}
 
     const handleAddTOContactModalSaveBtn = () => {
-        const newContact = new Contact(firstName, lastName, email);
+        const newContact = new Contact("",firstName, lastName, email, "", null, [], []);
         dispatch(saveContact(newContact));
     }
 
@@ -262,7 +257,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse,
                                 scrollbarColor: "#888 #333",
                             }}
                             >
-                                {contactDetails.map((contact, index) => {
+                                {contacts.map((contact, index) => {
                                     const fullName = getFullName(contact.firstName, contact.lastName);
 
                                     return (
@@ -272,7 +267,7 @@ const CreateChats: React.FC<CreateRoomsProps> = ({ setShowCreateRooms, collapse,
                                             selectedSegment={selectedValue}
                                             name={fullName}
                                             bio={contact.bio}
-                                            profile={contact.profile}
+                                            profile={""}
                                             onClick={() => handleContactCard(contact)}
                                         />
                                     );
