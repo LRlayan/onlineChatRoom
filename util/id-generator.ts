@@ -7,7 +7,7 @@ class IdGenerator {
         switch (type) {
             case "ROOM-":
                 const getAllRoom = await getAllRooms();
-                const roomCodes = getAllRoom.map((room) => room.roomCode);
+                const roomCodes = getAllRoom.map((room) => room.code);
 
                 if (roomCodes.length > 0) {
                     return await this.codesIncrement(roomCodes,"ROOM");
