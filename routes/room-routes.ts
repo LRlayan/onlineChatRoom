@@ -15,20 +15,12 @@ roomRoutes.post("/saveRooms", upload.single('image'),async (req, res) => {
     const image = req.file ? req.file.filename : null;
     const idGenerator = new IdGenerator();
     const newCode = await idGenerator.generateId('ROOM-');
-    console.log("new room", name)
-    console.log("image ",image);
-    console.log("Create Date  ",createAt);
-    console.log("members  ",members);
-
-    if (!req.file) {
-        res.status(400).json({ message: "No file uploaded" });
-        return;
-    }
 
     const room = new RoomModel("","Chat Room", new Date(), "", []);
     room.roomCode = newCode;
     room.name = name;
     room.createAt = createAt;
+    room.image = image;
     room.members = members;
     const result = await saveRoomService(room);
     res.status(201).json(result);
