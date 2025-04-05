@@ -3,7 +3,7 @@ import {UserModel} from "../model/user-model";
 
 export async function saveUserService(user: UserModel) {
     try {
-        const users = new UserModel(user.username, user.email, user.password);
+        const users = new UserModel(user.username, user.email, user.password, user.contacts, user.rooms);
         return await saveUserRepository(users);
     } catch (e) {
         console.log(" service : ", e);
