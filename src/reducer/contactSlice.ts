@@ -8,10 +8,15 @@ const initialState: {contacts: Contact[]} = {
 
 export type ContactRootState = {
     contact: {
-        contact: Array<{
+        contacts: Array<{
+            code: string;
             firstName: string;
             lastName: string;
             email: string;
+            bio: string;
+            image: File | null;
+            rooms: string[];
+            users: string[];
         }>
     }
 }
@@ -27,6 +32,19 @@ export const saveContact = createAsyncThunk(
         }
     }
 );
+
+export const getAllContact = createAsyncThunk(
+    "contact/getAllContact",
+    async () => {
+        try {
+            const response = await api.get("contact/getAllContact");
+            console.log("get all contact : ", response.data);
+            return response.data;
+        } catch (e) {
+            throw e;
+        }
+    }
+)
 
 const ContactSlice = createSlice({
     name: "contact",
@@ -44,6 +62,16 @@ const ContactSlice = createSlice({
             })
             .addCase(saveContact.rejected, () => {
                 console.log("rejected save contact");
+            })
+            .addCase(getAllContact.fulfilled, (state, action) => {
+                state.contacts = action.payload || [];
+                console.log("payload : " , action.payload);
+            })
+            .addCase(getAllContact.pending, () => {
+                console.log("pending get all contacts");
+            })
+            .addCase(getAllContact.rejected, () => {
+                console.log("rejected get all contact");
             })
     }
 });
