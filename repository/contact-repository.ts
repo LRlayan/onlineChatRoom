@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import Contacts from "../schema/contacts";
+import Rooms from "../schema/room";
+import {RoomModel} from "../model/room-model";
 
 interface Contacts {
     code: string;
@@ -40,5 +42,43 @@ export async function getSelectedContacts(_ids: mongoose.Types.ObjectId[]) {
     } catch (e) {
         console.error("Error fetching selected contact:", e);
         throw new Error("Failed to fetch selected contact. Please try again.");
+    }
+}
+
+export async function updateRoomsOfContacts(code: string | null, roomData: RoomModel) {
+    try {
+        const roomDocs = await Rooms.findOne({ code }).lean<{ _id: mongoose.Types.ObjectId } | null>();
+        if (!roomDocs) {
+            throw new Error(`Field with code ${code} not found`);
+        }
+        const roomId = roomDocs._id;
+
+        const existingContactDocs = await Contacts.find({ rooms: roomId }).lean<{ _id: mongoose.Types.ObjectId }[]>();
+        const existingContactIds = existingContactDocs.map(room => room._id);
+
+        const updatedContactDocs = await Contacts.find({ code: { $in: roomData.members } }).lean<{ _id: mongoose.Types.ObjectId }[]>();
+        const updatedContactIds = updatedContactDocs.map(contact => contact._id);
+
+        const contactToRemoveRoom = existingContactIds.filter(id => !updatedContactIds.includes(id));
+        const contactToAddRoom = updatedContactIds.filter(id => !existingContactIds.includes(id));
+
+        if (contactToRemoveRoom.length > 0) {
+            await Contacts.updateMany(
+                { _id: { $in: contactToRemoveRoom } },
+                { $pull: { rooms: roomId } }
+            );
+        }
+
+        if (contactToAddRoom.length > 0) {
+            await Contacts.updateMany(
+                { _id: { $in: contactToAddRoom } },
+                { $addToSet: { rooms: roomId } }
+            );
+        }
+
+        return updatedContactIds;
+    } catch (e) {
+        console.error("Error updating rooms of contacts:", e);
+        throw e;
     }
 }
