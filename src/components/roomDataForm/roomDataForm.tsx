@@ -1,8 +1,11 @@
-import React, {Dispatch, SetStateAction} from "react";
+import React, {Dispatch, SetStateAction, useEffect} from "react";
 import {Box, Flex, Text, TextField} from "@radix-ui/themes";
 import ContactCard from "../contactCard/contactCard.tsx";
 import {Contact} from "../../model/contact.ts";
 import {getFullName} from "../../../util/getFullName.ts";
+import {AppDispatch} from "../../store/store.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {ContactRootState, getAllContact} from "../../reducer/contactSlice.ts";
 
 interface RoomDataFormProps {
     collapse: boolean;
@@ -12,17 +15,14 @@ interface RoomDataFormProps {
     setMembers: Dispatch<SetStateAction<Contact[]>>;
 }
 
-const contactDetails = [
-    {firstName: "Amodh", lastName: "Nanditha", email: "amodh@gmail.com", bio: "Software", profile: ""},
-    {firstName: "Kavindu", lastName: "Gayantha", email: "kavi@gmail.com", bio: "Software Dev", profile: ""},
-    {firstName: "Tharusha", lastName: "Nethmina", email: "capa@gmail.com", bio: "Software Engineering", profile: ""},
-    {firstName: "Nishan", lastName: "Tharuka", email: "nisha@gmail.com", bio: "Developer", profile: ""},
-    {firstName: "Eranga", lastName: "Hasakalum", email: "era@gmail.com", bio: "fullstack dev", profile: ""},
-    {firstName: "Saminda", lastName: "Fernando", email: "sami@gmail.com", bio: "Bekaray ", profile: ""},
-    {firstName: "Sandul", lastName: "Rusara", email: "sandul@gmail.com", bio: "Hichchi guide", profile: ""},
-];
-
 const RoomDataForm: React.FC<RoomDataFormProps> = ({ collapse, selectedValue, sizeTextField, setRoomName, setMembers }) => {
+
+    const dispatch = useDispatch<AppDispatch>();
+    const contacts = useSelector((state: ContactRootState) => state.contact.contacts) || [];
+
+    useEffect(() => {
+        dispatch(getAllContact());
+    }, [dispatch]);
 
     const handleContactCard = (contact: Contact) => {
         setMembers((prevMembers: Contact[]) => {
@@ -55,7 +55,7 @@ const RoomDataForm: React.FC<RoomDataFormProps> = ({ collapse, selectedValue, si
                         scrollbarWidth: "thin",
                         scrollbarColor: "#888 #333",
                     }}>
-                    {contactDetails.map((contact, index) => {
+                    {contacts.map((contact, index) => {
                         const fullName = getFullName(contact.firstName, contact.lastName);
 
                         return (
@@ -65,7 +65,7 @@ const RoomDataForm: React.FC<RoomDataFormProps> = ({ collapse, selectedValue, si
                                 selectedSegment={selectedValue}
                                 name={fullName}
                                 bio={contact.bio}
-                                profile={contact.profile}
+                                profile={""}
                                 onClick={() => handleContactCard(contact)}
                             />
                         );
