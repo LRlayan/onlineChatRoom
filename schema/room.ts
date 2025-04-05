@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface IRooms {
-    roomCode: string | null;
+    code: string | null;
     name: string;
     createAt: Date;
     image: string | null;
@@ -9,7 +9,7 @@ export interface IRooms {
 }
 
 const rooms = new mongoose.Schema<IRooms>({
-    roomCode: String,
+    code: String,
     name: String,
     createAt: { type: Date, default: Date.now },
     image: String,

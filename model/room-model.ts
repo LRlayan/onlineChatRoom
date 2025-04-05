@@ -1,24 +1,24 @@
 export class RoomModel {
-    private _roomCode: string | null;
+    private _code: string | null;
     private _name: string;
     private _createAt: Date;
     private _image: string | null;
     private _members: string[];
 
-    constructor(roomCode: string | null, name: string, createAt: Date, image: string | null, members: string[]) {
-        this._roomCode = roomCode;
+    constructor(code: string | null, name: string, createAt: Date, image: string | null, members: string[]) {
+        this._code = code;
         this._name = name;
         this._createAt = createAt;
         this._image = image;
         this._members = members;
     }
 
-    get roomCode(): string | null {
-        return this._roomCode;
+    get code(): string | null {
+        return this._code;
     }
 
-    set roomCode(value: string | null) {
-        this._roomCode = value;
+    set code(value: string | null) {
+        this._code = value;
     }
 
     get name(): string {
