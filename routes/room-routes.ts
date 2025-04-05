@@ -16,12 +16,16 @@ roomRoutes.post("/saveRooms", upload.single('image'),async (req, res) => {
     const idGenerator = new IdGenerator();
     const newCode = await idGenerator.generateId('ROOM-');
 
+    const parsedMembers : string[] = members ? JSON.parse(members) : [];
+    const contactCodes = parsedMembers.map((contact: any) => contact.code);
+
     const room = new RoomModel("","Chat Room", new Date(), "", []);
-    room.roomCode = newCode;
+    room.code = newCode;
     room.name = name;
     room.createAt = createAt;
     room.image = image;
-    room.members = members;
+    room.members = contactCodes;
+
     const result = await saveRoomService(room);
     res.status(201).json(result);
 });
@@ -45,9 +49,6 @@ export const createRoomRoutes = (io: any) => {
             room,
             time: new Date().toISOString(),
         });
-        console.log("room name : " ,room);
-        console.log("message sender : ", sender);
-        console.log("room message : " ,message);
         res.status(200).json({ success: true, message: {message} });
     })
     return router;
