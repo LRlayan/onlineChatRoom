@@ -1,25 +1,28 @@
 import express from "express";
 import {ContactModel} from "../model/contact-model";
-import {saveContactService} from "../service/contact-service";
+import {getAllContactService, saveContactService} from "../service/contact-service";
 import IdGenerator from "../util/id-generator";
 import { Request, Response } from "express";
 import {AuthRequest} from "../middleware/authenticate";
+import {ImageUploader} from "../util/image-uploader";
 
 const contactRoutes = express.Router();
+const imageUploader = new ImageUploader();
+const upload = imageUploader.uploader('contact');
 
-contactRoutes.post("/saveContact", async (req: AuthRequest, res: Response)=> {
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const email = req.body.email;
+contactRoutes.post("/saveContact", upload.single('image'), async (req: AuthRequest, res: Response)=> {
+    const { firstName, lastName, email } = req.body;
+    const image = req.file ? req.file.filename : null;
     const idGenerator = new IdGenerator();
     const newCode = await idGenerator.generateId('CONTACT-');
 
     try {
-        const contact = new ContactModel("", "", "", "", [], []);
+        const contact = new ContactModel("", "", "", "", "", "", [], []);
         contact.code = newCode;
         contact.firstName = firstName;
         contact.lastName = lastName;
         contact.email = email;
+        contact.image = image;
         const loggedInUser = req.user;
         const response = await saveContactService(loggedInUser, contact);
         if (response === false) {
@@ -30,6 +33,23 @@ contactRoutes.post("/saveContact", async (req: AuthRequest, res: Response)=> {
     } catch (e) {
         console.log("Failed to save contact!",e);
         res.status(400).send("Failed to save contact. Please try again.");
+    }
+});
+
+contactRoutes.get("/getAllContact", async (req, res) => {
+    try {
+        console.log("get all contacts ")
+        const response = await getAllContactService();
+        if (response) {
+            if (response) {
+                res.status(201).json(response);
+            } else {
+                res.status(400).send("contact data not found");
+            }
+        }
+    } catch (e) {
+        console.log("Failed to get contact data!",e);
+        res.status(400).send("Failed to get contact data.");
     }
 });
 
