@@ -12,7 +12,7 @@ router.post("/login", async (req: express.Request, res: express.Response) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    const user : UserModel = new UserModel(username, "", password);
+    const user : UserModel = new UserModel(username, "",  password, [], []);
     try {
         const isVerified = await verifyUserCredentialsService(username,password);
 
@@ -32,7 +32,7 @@ router.post("/login", async (req: express.Request, res: express.Response) => {
 router.post("/register", async (req, res) => {
     const { username, email, password } = req.body;
 
-    const user = new UserModel(username, email, password);
+    const user = new UserModel(username, email, password, [], []);
     try{
         const registration = await saveUserService(user);
         res.status(201).json(registration);
