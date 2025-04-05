@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import Contacts from "../schema/contacts";
 import Rooms from "../schema/room";
 import {saveRoomRepository} from "../repository/room-repository";
-import {getSelectedContacts} from "../repository/contact-repository";
+import {getSelectedContacts, updateRoomsOfContacts} from "../repository/contact-repository";
 
 export async function saveRoomService (roomData: RoomModel) {
     try {
@@ -14,13 +14,15 @@ export async function saveRoomService (roomData: RoomModel) {
         contactRefObjectId = contactDocs.map((contact) => contact._id);
 
         const newRoom = new Rooms({
-            roomCode: roomData.roomCode,
+            code: roomData.code,
             name: roomData.name,
             createAt: roomData.createAt,
             members: contactRefObjectId
         });
 
         const res = await saveRoomRepository(newRoom);
+        await updateRoomsOfContacts(roomData.code, roomData);
+
         const getContacts = await getSelectedContacts(res.members);
         contactRefEmails = getContacts.map((contact) => contact.email);
 
